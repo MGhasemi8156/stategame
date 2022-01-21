@@ -150,33 +150,6 @@ src/main.c.s:
 	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/main.c.s
 .PHONY : src/main.c.s
 
-src/soldier.o: src/soldier.c.o
-
-.PHONY : src/soldier.o
-
-# target to build an object file
-src/soldier.c.o:
-	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/soldier.c.o
-.PHONY : src/soldier.c.o
-
-src/soldier.i: src/soldier.c.i
-
-.PHONY : src/soldier.i
-
-# target to preprocess a source file
-src/soldier.c.i:
-	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/soldier.c.i
-.PHONY : src/soldier.c.i
-
-src/soldier.s: src/soldier.c.s
-
-.PHONY : src/soldier.s
-
-# target to generate assembly for a file
-src/soldier.c.s:
-	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/soldier.c.s
-.PHONY : src/soldier.c.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -189,9 +162,6 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/soldier.o"
-	@echo "... src/soldier.i"
-	@echo "... src/soldier.s"
 .PHONY : help
 
 
