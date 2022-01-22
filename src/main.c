@@ -6,6 +6,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 
+#include "map.h"
+#include "events.h"
+
+
 const int FPS = 60;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -19,9 +23,15 @@ int main() {
     }
 
     SDL_Window *Game_Window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
+                                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
     SDL_Renderer *Renderer = SDL_CreateRenderer(Game_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     
+    int lands_n;
+    Land lands[20];
+    load_map("./data/maps/map01.txt", &lands_n, lands);    
+    
+    Land* selected_land = NULL;
+
     SDL_bool shallExit = SDL_FALSE;
     
     while (shallExit == SDL_FALSE) {
@@ -29,23 +39,17 @@ int main() {
         SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
         SDL_RenderClear(Renderer);
         
-        
+        apply_map(Renderer, lands_n, lands);
         // listen for key events
-        SDL_Event sdlEvent;
-        while (SDL_PollEvent(&sdlEvent)) {
-            switch (sdlEvent.type) {
-                case SDL_QUIT:
-                    shallExit = SDL_TRUE;
-                    break;
-
-            }
-        }
+        event_listener(&shallExit, lands_n, lands, &selected_land);
         
         // update window 
         SDL_RenderPresent(Renderer);
         // set delay as FPS
         SDL_Delay(1000 / FPS);
     }
-
+    
+    // free allocated memory
+    // TODO free window and renderer
     return 0;
 }
