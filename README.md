@@ -9,9 +9,8 @@ building instructions ... .
 ## TODO
 ### map:
 - [ ] struct Land
-- [ ] struct Barrack
-- [ ] make_map() => make arrays of Lands and Barracks
-- [ ] apply_map() =>render and apply changes each frame
-- [ ] free_map() => free allocated memory after closing the game
+- [x] load_map() => make array of Lands
+- [x] apply_map() => render and apply changes each frame
+- [ ] make text number better
 ### soldier:
 
