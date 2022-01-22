@@ -15,9 +15,12 @@ building instructions ... .
 - [ ] make_random_map() => make array of Lands
 - [ ] change data : .txt -> .bin
 - [ ] make some sample maps
+- [ ] draw attack line
 ### soldier:
-
+- [ ] add_soldiers()
+- [ ] move_soldiers()
+- [ ] free_soldiers()
 ### events:
-- [ ] event_listener()
+- [x] event_listener()
 
 
