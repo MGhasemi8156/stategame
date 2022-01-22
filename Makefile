@@ -123,6 +123,33 @@ state/fast:
 	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/build
 .PHONY : state/fast
 
+src/events.o: src/events.c.o
+
+.PHONY : src/events.o
+
+# target to build an object file
+src/events.c.o:
+	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/events.c.o
+.PHONY : src/events.c.o
+
+src/events.i: src/events.c.i
+
+.PHONY : src/events.i
+
+# target to preprocess a source file
+src/events.c.i:
+	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/events.c.i
+.PHONY : src/events.c.i
+
+src/events.s: src/events.c.s
+
+.PHONY : src/events.s
+
+# target to generate assembly for a file
+src/events.c.s:
+	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/events.c.s
+.PHONY : src/events.c.s
+
 src/main.o: src/main.c.o
 
 .PHONY : src/main.o
@@ -186,6 +213,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... state"
+	@echo "... src/events.o"
+	@echo "... src/events.i"
+	@echo "... src/events.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
