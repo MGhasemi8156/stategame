@@ -12,5 +12,12 @@ building instructions ... .
 - [x] load_map() => make array of Lands
 - [x] apply_map() => render and apply changes each frame
 - [ ] make text number better
+- [ ] make_random_map() => make array of Lands
+- [ ] change data : .txt -> .bin
+- [ ] make some sample maps
 ### soldier:
+
+### events:
+- [ ] event_listener()
+
 
