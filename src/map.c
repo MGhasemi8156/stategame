@@ -50,7 +50,7 @@ void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20]) {
         SDL_RenderCopyEx(Renderer, texture, NULL, &source, lands[i].angle, NULL, SDL_FLIP_NONE);
         lands[i].angle += 1;
         if (lands[i].has_barrack) {
-            Uint32 color = lands[i].selected && side == 1 ? 0xffede2b9: get_side_normal_color();
+            Uint32 color = lands[i].selected && lands[i].side == 1 ? 0xffede2b9: get_side_normal_color(lands[i].side);
             filledCircleColor(Renderer, lands[i].barrack_x, lands[i].barrack_y, lands[i].barrack_r, get_side_normal_color(lands[i].side));
             char number[5];
             sprintf(number, "%d", lands[i].soldiers);
