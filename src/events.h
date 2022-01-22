@@ -11,7 +11,7 @@
 
 #include "map.h"
 
-void event_listener(SDL_bool* shallExit_ptr, int land_n, Land lands[20], Land* selected_land_ptr);
+void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20], Land** selected_land_ptr);
 
 
 #endif
