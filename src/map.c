@@ -10,7 +10,7 @@
 
 
 Uint32 get_side_normal_color(int side);
-Uint32 get_side_selcted_color(int side);
+void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr);
 
 // 0 -> successed, 1 -> get error
 int load_map(char file_path[100], int *lands_n, Land lands[20]) {
@@ -36,7 +36,7 @@ int load_map(char file_path[100], int *lands_n, Land lands[20]) {
     return 0;
 }
 
-void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20]) {
+void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20], Land* selected_land_ptr) {
     for (int i = 0; i < lands_n; i++) {
         // make surface and check
         SDL_Surface* image = SDL_LoadBMP(lands[i].path);
@@ -57,12 +57,24 @@ void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20]) {
             stringRGBA(Renderer, lands[i].barrack_x - 8, lands[i].barrack_y - 5, number, 0, 0, 0, 255);
         }
         
+        // draw attack line
+        draw_attack_line(Renderer, selected_land_ptr);
+        
         // free allocated memory
         SDL_FreeSurface(image);
         SDL_DestroyTexture(texture);
         
     }
 }
+
+void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr) {
+    if (selected_land_ptr != NULL) {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        SDL_RenderDrawLine(Renderer, selected_land_ptr->barrack_x, selected_land_ptr->barrack_y, x, y);
+    }
+}
+
 
 Uint32 get_side_normal_color(int side) {
     switch (side) {

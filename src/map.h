@@ -27,6 +27,6 @@ typedef struct Land {
  
 int load_map(char file_path[100], int *lands_n, Land lands[20]);
 
-void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20]);
+void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20], Land* selected_land_ptr);
 
 #endif
