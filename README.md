@@ -12,15 +12,18 @@ building instructions ... .
 - [x] load_map() => make array of Lands
 - [x] apply_map() => render and apply changes each frame
 - [ ] make text number better
-- [ ] make_random_map() => make array of Lands
+- [x] make_random_map() => make array of Lands
 - [ ] change data : .txt -> .bin
 - [ ] make some sample maps
-- [ ] draw attack line
+- [x] draw attack line
+- [ ] make attack line a streaming pattern
+- [ ] rebirth
+- [ ] make new file for making a random map  
 ### soldier:
+- [ ] struct Soldier
 - [ ] add_soldiers()
 - [ ] move_soldiers()
 - [ ] free_soldiers()
 ### events:
 - [x] event_listener()
-
-
+### potions:
