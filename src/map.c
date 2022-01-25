@@ -133,13 +133,7 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         else if (x - y > 400) y += 200;
         else if (rand()%2) x += 200;
         else y += 200;
-
-        for (int m = 0; m < 250; m++) {
-            for (int n = 0; n < 250; n++) {
-                printf("%d ", lands[lands_i - 1].pixels[m][n]);
-            }
-            printf("\n");
-        }
+        
         // save land
         save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x, lands[lands_i].barrack_y, lands[lands_i].has_barrack,
                        lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers);
