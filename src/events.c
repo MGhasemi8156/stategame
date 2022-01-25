@@ -19,7 +19,7 @@ void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20], Land**
             case SDL_MOUSEBUTTONDOWN:
                 if (Event.button.button == SDL_BUTTON_LEFT) {
                     for (int i = 0; i < lands_n; i++) {
-                        double d = sqrt(pow(lands[i].barrack_x - Event.button.x, 2) + 
+                        double d = sqrt(pow(lands[i].barrack_x - Event.button.x, 2) +
                                         pow(lands[i].barrack_y - Event.button.y, 2));
                         if (d <= lands[i].barrack_r + 5) {
                             if (*selected_land_ptr == NULL) {
@@ -37,12 +37,12 @@ void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20], Land**
                 if (Event.button.button == SDL_BUTTON_LEFT) {
                     if (*selected_land_ptr != NULL) {
                         for (int i = 0; i < lands_n; i++) {
-                            double d = sqrt(pow(lands[i].barrack_x - Event.button.x, 2) + 
+                            double d = sqrt(pow(lands[i].barrack_x - Event.button.x, 2) +
                                             pow(lands[i].barrack_y - Event.button.y, 2));
                             if (d <= lands[i].barrack_r + 5) {
                                 if (*selected_land_ptr != &lands[i]) {
-                                    printf("move from %d-%d to %d-%d\n", (*selected_land_ptr)->x, (*selected_land_ptr)->y, lands[i].x, lands[i].y);
-                                }   
+                                    printf("move from %d-%d to %d-%d\n", (*selected_land_ptr)->barrack_x, (*selected_land_ptr)->barrack_y, lands[i].barrack_x, lands[i].barrack_y);
+                                }
                                 break;
                             }
                         }
