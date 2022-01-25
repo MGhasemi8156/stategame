@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <time.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
@@ -23,32 +24,37 @@ int main() {
     }
 
     SDL_Window *Game_Window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);
+                                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
     SDL_Renderer *Renderer = SDL_CreateRenderer(Game_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-    
-    int lands_n;
+
+    // set seed
+    srand(time(0));
+
+    int lands_n = 12;
     Land lands[20];
-    load_map("./data/maps/map01.txt", &lands_n, lands);    
-    
+    //create_rand_map(lands_n, lands, 3);
+    load_rand_map("./data/maps/map02.txt", &lands_n, lands);
+
     Land* selected_land = NULL;
 
     SDL_bool shallExit = SDL_FALSE;
-    
+
     while (shallExit == SDL_FALSE) {
         // renderer color and clear
         SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
         SDL_RenderClear(Renderer);
-        
-        apply_map(Renderer, lands_n, lands);
+
+        apply_rand_map(Renderer, lands_n, lands, selected_land);
+
         // listen for key events
         event_listener(&shallExit, lands_n, lands, &selected_land);
-        
-        // update window 
+
+        // update window
         SDL_RenderPresent(Renderer);
         // set delay as FPS
         SDL_Delay(1000 / FPS);
     }
-    
+
     // free allocated memory
     // TODO free window and renderer
     return 0;
