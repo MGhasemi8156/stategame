@@ -13,6 +13,7 @@
 
 void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n);
 void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack,  int barrack_r, int side, int soldiers);
+void smooth_map(int map[100][100]);
 
 char* get_new_file_name(); 
 void get_land_coordinates(int* x, int* y);
@@ -99,7 +100,8 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             int to_check[500][2] = {{50, 50}};
 
             rand_BFS(0, map, to_check, 1);
-
+            smooth_map(map);        
+    
             memcpy(lands[lands_i].pixels, map, 100 * 100 * sizeof(int));
             
             lands[lands_i].has_barrack = 1;
@@ -131,6 +133,7 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         int to_check[500][2] = {{50, 50}};       
 
         rand_BFS(0, map, to_check, 1);
+        smooth_map(map);
 
         memcpy(lands[lands_i].pixels, map, 100 * 100 * sizeof(int));
         
@@ -188,6 +191,26 @@ void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n) {
         }
     }
     rand_BFS(iterator + 1, map, ss, l);
+}
+
+void smooth_map(int map[100][100]) {
+    for (int i = 0; i < 100; i++) {
+        for (int j = 0; j < 100; j++) { 
+            if (map[i][j] == 0) {
+                int adjacents = 0;
+                if (j > 0 && map[i][j - 1] == 1) adjacents++;
+                if (i > 0 && map[i - 1][j] == 1) adjacents++;
+                if (j + 1 < 99 && map[i][j + 1] == 1) adjacents++;
+                if (i + 1 < 99 && map[i + 1][j] == 1) adjacents++;
+                if (i > 0 && j > 0 && map[i - 1][j - 1]) adjacents++;
+                if (i > 0 && j < 99 && map[i - 1][j + 1]) adjacents++;
+                if (i < 99 && j > 0 && map[i + 1][j - 1]) adjacents++;
+                if (i < 99 && j < 99 && map[i + 1][j + 1]) adjacents++;
+                if (adjacents > 4) map[i][j] = 1;
+            }
+        }
+    }
+
 }
 
 void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack,  int barrack_r, int side, int soldiers) {
