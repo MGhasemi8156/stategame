@@ -103,13 +103,21 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             rand_BFS(0, map, to_check, 1);
 
             memcpy(lands[lands_i].pixels, map, 250 * 250 * sizeof(int));
+            
             lands[lands_i].has_barrack = 1;
             lands[lands_i].side = i;
+            
             lands[lands_i].barrack_x = x + (rand()%2 ? -1: 1) * rand()%50;
             lands[lands_i].barrack_y = y + (rand()%2 ? -1: 1) * rand()%50;
             lands[lands_i].barrack_r = 25;
+            
             lands[lands_i].soldiers = 12; // TODO change later
-            lands[lands_i].selected = 0;
+            lands[lands_i].max_soldiers = 50;
+            lands[lands_i].rebirth_rate = 30;
+            lands[lands_i].rebirth_timer = 30;
+           
+             lands[lands_i].selected = 0;
+            
 
             // rand x-y for land
             if (y - x > 400) x += 200;
@@ -131,12 +139,19 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         rand_BFS(0, map, to_check, 1);
 
         memcpy(lands[lands_i].pixels, map, 250 * 250 * sizeof(int));
+        
         lands[lands_i].has_barrack = 1;
         lands[lands_i].side = i;
+        
         lands[lands_i].barrack_x = x + (rand()%2 ? -1: 1) * rand()%50;
         lands[lands_i].barrack_y = y + (rand()%2 ? -1: 1) * rand()%50;
         lands[lands_i].barrack_r = 25;
+        
         lands[lands_i].soldiers = 12; // TODO change later
+        lands[lands_i].max_soldiers = 20;
+        lands[lands_i].rebirth_rate = 60;
+        lands[lands_i].rebirth_timer = 60;
+
         lands[lands_i].selected = 0;
 
         // rand x-y for land
@@ -235,12 +250,24 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
             }
         }
 
-        if (lands[i].has_barrack) {
+        if (lands[i].has_barrack) { 
+            // draw barrack
             Uint32 color = lands[i].selected && lands[i].side == 1 ? 0xffede2b9: get_side_normal_color(lands[i].side);
             filledCircleColor(Renderer, lands[i].barrack_x, lands[i].barrack_y, lands[i].barrack_r, color);
+            
+            // add number
             char number[5];
             sprintf(number, "%d", lands[i].soldiers);
             stringRGBA(Renderer, lands[i].barrack_x - 8, lands[i].barrack_y - 5, number, 0, 0, 0, 255);
+            
+            // rebirth
+            lands[i].rebirth_timer -= 1;
+            if (lands[i].rebirth_timer == 0) {
+                lands[i].rebirth_timer = lands[i].rebirth_rate;
+                if (lands[i].soldiers < lands[i].max_soldiers) {
+                    lands[i].soldiers += 1;
+                }
+            }
         }
 
         // draw attack line

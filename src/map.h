@@ -22,10 +22,16 @@ typedef struct Land {
 
     int has_barrack;
     int side;
+    
     Sint16 barrack_x;
     Sint16 barrack_y;
     Sint16 barrack_r;
+    
     int soldiers;
+    int max_soldiers;
+    int rebirth_rate;
+    int rebirth_timer;
+
     int selected;
 } Land;
 
