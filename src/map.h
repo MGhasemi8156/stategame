@@ -17,8 +17,9 @@ typedef struct Land {
     int width;
     int height;
     double angle;
+    
     // for rand Land
-    int pixels[250][250];
+    int pixels[100][100];
 
     int has_barrack;
     int side;
