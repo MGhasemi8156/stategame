@@ -94,12 +94,13 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     
     // add number of lands to file
     fprintf(map_file_ptr, "%d\n", lands_n);
-
+    
     int lands_i = 0;
     for (int i = 1; i < players + 1; i++) { // i refers to side
         for (int j = 0; j < share; j++) {
             int map[250][250] = {0};
             int to_check[500][2] = {{125, 125}};
+
             rand_BFS(0, map, to_check, 1);
 
             memcpy(lands[lands_i].pixels, map, 250 * 250 * sizeof(int));
@@ -133,9 +134,11 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     }
 
     // lands with no side
-    for (int i = 0; i < lands_n - lands_i; i++) {
+    int impartials = lands_n - lands_i;
+    for (int i = 0; i < impartials; i++) {
         int map[250][250] = {0};
-        int to_check[500][2] = {{125, 125}};
+        int to_check[500][2] = {{125, 125}};       
+
         rand_BFS(0, map, to_check, 1);
 
         memcpy(lands[lands_i].pixels, map, 250 * 250 * sizeof(int));
@@ -212,7 +215,7 @@ void save_rand_land(FILE *map_file_ptr, int map[250][250], int x, int y, int has
 }
 
 // 0 -> successed, 1 -> get error
-int load_rand_map(char file_path[100], int *lands_n, Land lands[20]) {
+int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
     FILE *file_ptr = fopen(file_path, "r");
     if (file_ptr == NULL) { // check for error
         fprintf(stderr, "%s does not exists.\n", file_path);
