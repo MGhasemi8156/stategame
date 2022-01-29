@@ -8,22 +8,29 @@ building instructions ... .
 
 ## TODO
 ### map:
-- [ ] struct Land
+- [x] struct Land
 - [x] load_map() => make array of Lands
 - [x] apply_map() => render and apply changes each frame
 - [ ] make text number better
 - [x] make_random_map() => make array of Lands
-- [ ] change data : .txt -> .bin
-- [ ] make some sample maps
+- [x] make some sample maps
 - [x] draw attack line
 - [ ] make attack line a streaming pattern
-- [ ] rebirth
-- [ ] make new file for making a random map  
+- [x] rebirth
+- [x] make new file for making a random map
+- [ ] check segment fault for 32 lands
+- [ ] set coordinates better
+- [ ] add a streaming sea at background 
 ### soldier:
 - [ ] struct Soldier
 - [ ] add_soldiers()
-- [ ] move_soldiers()
+- [ ] draw_soldiers()
+- [ ] check_for_collisions()
 - [ ] free_soldiers()
 ### events:
 - [x] event_listener()
 ### potions:
+
+### design:
+- [ ] initial number of soliers
+
