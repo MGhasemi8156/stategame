@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <string.h>
+#include <dirent.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
@@ -12,6 +14,7 @@
 void rand_BFS(int iterator, int map[250][250], int to_check[500][2], int n);
 void save_rand_land(FILE *map_file_ptr, int map[250][250], int x, int y, int has_barrack,  int barrack_r, int side, int soldiers);
 
+char* get_new_file_name(); 
 
 Uint32 get_side_normal_color(int side);
 void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr);
@@ -76,15 +79,23 @@ void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20], Land* select
 
 void create_rand_map(int lands_n, Land lands[], int players) {
     int share = lands_n/(players + 2);
-
+    
+    // coordinates of lands
     int x = 200;
     int y = 200;
+    
+    char *file_name = get_new_file_name();
 
     // open file to save the rand map
-    FILE* map_file_ptr = fopen("./data/maps/map02.txt", "w");
+    FILE* map_file_ptr = fopen(file_name, "w");
+    
+    // free file name ptr
+    free(file_name);
+    
+    // add number of lands to file
     fprintf(map_file_ptr, "%d\n", lands_n);
 
-    int lands_i = 0; // TODO change the seqeunce
+    int lands_i = 0;
     for (int i = 1; i < players + 1; i++) { // i refers to side
         for (int j = 0; j < share; j++) {
             int map[250][250] = {0};
@@ -236,6 +247,32 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
         draw_attack_line(Renderer, selected_land_ptr);
     }
 }
+
+char* get_new_file_name() {
+    char* file_name = malloc(50);
+    *file_name = '\0';
+    
+    DIR *maps_dir;
+    struct dirent *dir;
+    maps_dir = opendir("./data/maps");
+    
+    int file_number = 0;
+    if (maps_dir != NULL) {
+        while((dir = readdir(maps_dir)) != NULL) {
+            file_number++;
+        }
+        file_number--; // for . and ..
+    }
+    else fprintf(stderr, "can not find ./data/maps\n");
+    
+    char temp[50];
+    sprintf(temp, "./data/maps/map%d.txt", file_number);
+
+    strcat(file_name, temp);
+    
+    return file_name;
+}
+
 
 void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr) {
     if (selected_land_ptr != NULL) {
