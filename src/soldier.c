@@ -13,8 +13,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
                   Land* source, Land* destination) {
     // extend the memory if needed
     if (*soldiers_n + source->soldiers > *max_soldiers) {
-        *soldiers_ptr = realloc(*soldiers_ptr, sizeof(Soldier) * (*max_soldiers + 500));
-        *max_soldiers += 500;
+        *soldiers_ptr = realloc(*soldiers_ptr, sizeof(Soldier) * (*max_soldiers + 250));
+        *max_soldiers += 250;
     }
     
     // add soldiers

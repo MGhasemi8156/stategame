@@ -36,9 +36,9 @@ int main() {
     //load_rand_map("./data/maps/map1.txt", &lands_n, lands);
     Land* selected_land = NULL;
 
-    Soldier *soldiers = malloc(500 * sizeof(Soldier));
+    Soldier *soldiers = malloc(250 * sizeof(Soldier));
     int soldiers_n = 0;
-    int max_soldiers = 500;
+    int max_soldiers = 250;
     
     SDL_bool shallExit = SDL_FALSE;
     
