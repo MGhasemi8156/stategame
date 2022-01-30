@@ -12,7 +12,8 @@
 
 
 void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n);
-void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack,  int barrack_r, int side, int soldiers);
+void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack, int barrack_r,
+                    int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer);
 void smooth_map(int map[100][100]);
 
 char* get_new_file_name(); 
@@ -121,7 +122,8 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             
             // save land
             save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x, lands[lands_i].barrack_y, lands[lands_i].has_barrack,
-                           lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers);
+                           lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers, lands[lands_i].max_soldiers,
+                           lands[lands_i].rebirth_rate, lands[lands_i].rebirth_timer);
             lands_i++;
         }
     }
@@ -154,7 +156,8 @@ void create_rand_map(int lands_n, Land lands[], int players) {
 
         // save land
         save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x, lands[lands_i].barrack_y, lands[lands_i].has_barrack,
-                       lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers);
+                       lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers, lands[lands_i].max_soldiers,
+                       lands[lands_i].rebirth_rate, lands[lands_i].rebirth_timer);
 
         lands_i++;
     }
@@ -213,8 +216,10 @@ void smooth_map(int map[100][100]) {
 
 }
 
-void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack,  int barrack_r, int side, int soldiers) {
-    fprintf(map_file_ptr, "%d %d %d %d %d %d\n", x, y, has_barrack, barrack_r, side, soldiers);
+void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack, int barrack_r,
+                    int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer) {
+    fprintf(map_file_ptr, "%d %d %d %d %d %d %d %d %d\n", x, y, has_barrack, barrack_r, side, soldiers,
+                                                          max_soldiers, rebirth_rate, rebirth_timer);
     for (int i = 0; i < 100; i++) {
         for (int j = 0; j < 100; j++) {
             fprintf(map_file_ptr, "%d ", map[i][j]);
@@ -235,9 +240,10 @@ int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
 
 
     for (int i = 0; i < *lands_n; i++) { // read lands data
-        fscanf(file_ptr, "%hd %hd %d %hd %d %d", &lands[i].barrack_x, &lands[i].barrack_y,
+        fscanf(file_ptr, "%hd %hd %d %hd %d %d %d %d %d", &lands[i].barrack_x, &lands[i].barrack_y,
                                                  &lands[i].has_barrack, &lands[i].barrack_r,
-                                                 &lands[i].side, &lands[i].soldiers);
+                                                 &lands[i].side, &lands[i].soldiers, &lands[i].max_soldiers,
+                                                 &lands[i].rebirth_rate, &lands[i].rebirth_timer);
         lands[i].selected = 0;
 
         for (int m = 0; m < 100; m++) {
