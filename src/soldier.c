@@ -17,8 +17,6 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         *max_soldiers += 500;
     }
     
-    // TODO: decrease array size
-    
     // add soldiers
     for (int i = 0; i < source->soldiers; i++) {
         Soldier temp;
@@ -32,7 +30,7 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         
         double l = sqrt(pow((destination->barrack_x - temp.x), 2) +
                         pow((destination->barrack_y - temp.y), 2));
-        // TODO add fraction
+        
         temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * 3;
         temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * 3;
         
@@ -50,8 +48,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
     source->soldiers = 0;
 }
 
-void apply_soldiers(SDL_Renderer* Renderer, int *soldiers_n, Soldier *soldiers, int lands_n, Land lands[]) {
-    for (int i = 0; i < *soldiers_n; i++) {
+void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
+    for (int i = 0; i < soldiers_n; i++) {
         if (!soldiers[i].born) { // birth check
             soldiers[i].till_birth -= 1;
             if (soldiers[i].till_birth <= 0) soldiers[i].born = 1;
@@ -61,15 +59,17 @@ void apply_soldiers(SDL_Renderer* Renderer, int *soldiers_n, Soldier *soldiers, 
             soldiers[i].x += soldiers[i].vx;
             soldiers[i].y += soldiers[i].vy;
             // draw
-            filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y, soldiers[i].r, 0xffff0000);
+            filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y, soldiers[i].r, 0xffff0000); // TODO color on side
             
         }
     }
+}
 
-    // collision detection
-    for (int i = 0; i < *soldiers_n; i++) {
+
+void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land lands[]) {
+    for (int i = 0; i < soldiers_n; i++) {
         // soldiers collisions
-        for (int j = i + 1; j < *soldiers_n; j++) { 
+        for (int j = i + 1; j < soldiers_n; j++) { // TODO not tested
             if (soldiers[i].side != soldiers[j].side && soldiers[i].power > 0 && soldiers[j].power > 0) {
                 double d = sqrt(pow(soldiers[i].x - soldiers[j].y, 2) +
                                 pow(soldiers[i].y - soldiers[j].y, 2));
@@ -81,20 +81,22 @@ void apply_soldiers(SDL_Renderer* Renderer, int *soldiers_n, Soldier *soldiers, 
             }
         }
         // lands collisions
-        for (int j = 0; j < lands_n; j++) {
+        if (soldiers[i].power > 0) {
             double d = sqrt(pow(soldiers[i].x - (soldiers[i].destination)->barrack_x, 2) + 
                             pow(soldiers[i].y - (soldiers[i].destination)->barrack_y, 2));
-            if (d < 26 && soldiers[i].power > 0) {
+            if (d < 26) {
                 if (soldiers[i].side == (soldiers[i].destination)->side) {
                     (soldiers[i].destination)->soldiers += soldiers[i].power;
                     soldiers[i].power = 0;
                 }
                 else {
+                    // side does not change
                     if ((soldiers[i].destination)->soldiers - soldiers[i].power >= 0) {
                         (soldiers[i].destination)->soldiers -= soldiers[i].power;
                         soldiers[i].power = 0;
                     } 
-                    else { // change the side
+                    // side changes
+                    else {
                         (soldiers[i].destination)->soldiers = soldiers[i].power - (soldiers[i].destination)->soldiers;
                         (soldiers[i].destination)->side = soldiers[i].side;
                         // set new values if was impartial
@@ -106,10 +108,11 @@ void apply_soldiers(SDL_Renderer* Renderer, int *soldiers_n, Soldier *soldiers, 
                 }
             }
         }
-        // for () potions
+        // TODO potions collisions
     }
+}
 
-    // remove zero power soldiers
+void remove_zero_power_soldiers(int* soldiers_n, Soldier *soldiers) {
     int soldiers_i = 0;
     for (int i = 0; i < *soldiers_n; i++) {
         if (soldiers[i].power > 0) {
@@ -117,5 +120,6 @@ void apply_soldiers(SDL_Renderer* Renderer, int *soldiers_n, Soldier *soldiers, 
             soldiers_i++;
         }
     }
+    
     *soldiers_n = soldiers_i;
 }

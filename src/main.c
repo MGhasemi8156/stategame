@@ -46,11 +46,15 @@ int main() {
         // renderer color and clear
         SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
         SDL_RenderClear(Renderer);
-        
+        printf("%d\n", soldiers_n);
         apply_rand_map(Renderer, lands_n, lands, selected_land);
         
-        apply_soldiers(Renderer, &soldiers_n, soldiers, lands_n, lands);
+        apply_soldiers(Renderer, soldiers_n, soldiers);
         
+        collision_detection(soldiers_n, soldiers, lands_n, lands);
+        
+        remove_zero_power_soldiers(&soldiers_n, soldiers);        
+
         // listen for key events
         event_listener(&shallExit, lands_n, lands, &selected_land, &soldiers_n,
                        &max_soldiers, &soldiers);
