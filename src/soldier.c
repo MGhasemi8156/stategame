@@ -21,11 +21,12 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
     for (int i = 0; i < source->soldiers; i++) {
         Soldier temp;
         
-        temp.till_birth = i * 7;
+        temp.till_birth = (i/3) * 7; // spawn three at a time
         temp.born = 0;
         
         temp.x = (double)source->barrack_x;
-        temp.y = (double)source->barrack_y;
+        temp.y = (double)source->barrack_y;        
+
         temp.r = 5; // TODO change
         
         double l = sqrt(pow((destination->barrack_x - temp.x), 2) +
@@ -34,9 +35,21 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * 3;
         temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * 3;
         
+        // make three parallel queue
+        switch (i%3) {
+            case 1:
+                temp.x += temp.vy * 5;
+                temp.y -= temp.vx * 5;
+                break;
+            case 2:
+                temp.x -= temp.vy * 5;
+                temp.y += temp.vx * 5;
+                break;
+        }
+        
         // move to the boundry of barrack
-        temp.x += temp.vx * 10;
-        temp.y += temp.vy * 10;
+        //temp.x += temp.vx * 10;
+        //temp.y += temp.vy * 10;
         
         temp.power = 1;
     
