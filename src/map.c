@@ -114,8 +114,8 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             
             lands[lands_i].soldiers = 12; // TODO change later
             lands[lands_i].max_soldiers = 50;
-            lands[lands_i].rebirth_rate = 30;
-            lands[lands_i].rebirth_timer = 30;
+            lands[lands_i].rebirth_rate = 60;
+            lands[lands_i].rebirth_timer = 60;
            
              lands[lands_i].selected = 0;
             
@@ -147,8 +147,8 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         
         lands[lands_i].soldiers = 12; // TODO change later
         lands[lands_i].max_soldiers = 20;
-        lands[lands_i].rebirth_rate = 60;
-        lands[lands_i].rebirth_timer = 60;
+        lands[lands_i].rebirth_rate = 120;
+        lands[lands_i].rebirth_timer = 120;
 
         lands[lands_i].selected = 0;
 
