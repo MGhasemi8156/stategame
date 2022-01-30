@@ -34,6 +34,10 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * 3;
         temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * 3;
         
+        // move to the boundry of barrack
+        temp.x += temp.vx * 10;
+        temp.y += temp.vy * 10;
+        
         temp.power = 1;
     
         temp.side = source->side;
