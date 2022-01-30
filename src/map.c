@@ -276,11 +276,13 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
             stringRGBA(Renderer, lands[i].barrack_x - 8, lands[i].barrack_y - 5, number, 0, 0, 0, 255);
             
             // rebirth
-            lands[i].rebirth_timer -= 1;
-            if (lands[i].rebirth_timer == 0) {
-                lands[i].rebirth_timer = lands[i].rebirth_rate;
-                if (lands[i].soldiers < lands[i].max_soldiers) {
-                    lands[i].soldiers += 1;
+            if (lands[i].side != 0) { // impartials do not rebirth
+                lands[i].rebirth_timer -= 1;
+                if (lands[i].rebirth_timer <= 0) {
+                    lands[i].rebirth_timer = lands[i].rebirth_rate;
+                    if (lands[i].soldiers < lands[i].max_soldiers) {
+                        lands[i].soldiers += 1;
+                    }
                 }
             }
         }
