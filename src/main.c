@@ -8,8 +8,8 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "map.h"
+#include "soldier.h"
 #include "events.h"
-
 
 const int FPS = 60;
 const int SCREEN_WIDTH = 640;
@@ -29,25 +29,31 @@ int main() {
 
     // set seed
     srand(time(0));
-
-    int lands_n = 12;
-    Land lands[20];
-    //create_rand_map(lands_n, lands, 3);
-    load_rand_map("./data/maps/map02.txt", &lands_n, lands);
-
+    //sdf();
+    int lands_n = 15;
+    Land lands[lands_n];
+    create_rand_map(lands_n, lands, 3);
+    //load_rand_map("./data/maps/map1.txt", &lands_n, lands);
     Land* selected_land = NULL;
 
+    Soldier *soldiers = malloc(500 * sizeof(Soldier));
+    int soldiers_n = 0;
+    int max_soldiers = 500;
+    
     SDL_bool shallExit = SDL_FALSE;
-
+    
     while (shallExit == SDL_FALSE) {
         // renderer color and clear
         SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
         SDL_RenderClear(Renderer);
-
+        
         apply_rand_map(Renderer, lands_n, lands, selected_land);
-
+        
+        apply_soldiers(Renderer, &soldiers_n, soldiers, lands_n, lands);
+        
         // listen for key events
-        event_listener(&shallExit, lands_n, lands, &selected_land);
+        event_listener(&shallExit, lands_n, lands, &selected_land, &soldiers_n,
+                       &max_soldiers, &soldiers);
 
         // update window
         SDL_RenderPresent(Renderer);
