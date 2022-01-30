@@ -1,5 +1,5 @@
 # Conquer states
-A game based on [state.io](https://play.google.com/store/apps/details?id=io.state.fight&hl=fa&gl=US) create with C and SDL2.
+A game based on [state.io](https://play.google.com/store/apps/details?id=io.state.fight&hl=fa&gl=US) created with C and SDL2.
 
 ## build
 building instructions ... .
@@ -21,16 +21,21 @@ building instructions ... .
 - [ ] check segment fault for 32 lands
 - [ ] set coordinates better
 - [ ] add a streaming sea at background 
+- [x] save rebirth stuff in .txt file
 ### soldier:
-- [ ] struct Soldier
-- [ ] add_soldiers()
-- [ ] draw_soldiers()
-- [ ] check_for_collisions()
-- [ ] free_soldiers()
+- [x] struct Soldier
+- [x] add_soldiers()
+- [x] draw_soldiers()
+- [x] check_for_collisions()
+- [x] realloc 
+- [ ] check soldiers collisions to work properly 
+- [x] move in paralel lines
+- [ ] collision detection for potions
 ### events:
 - [x] event_listener()
 ### potions:
-
+- [ ] create and add potions
+### ai:
 ### design:
-- [ ] initial number of soliers
+- [ ] initial number of soldiers
 
