@@ -7,9 +7,12 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "map.h"
+#include "soldier.h"
 #include "events.h"
 
-void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20], Land** selected_land_ptr) {
+void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20],
+                    Land** selected_land_ptr, int* soldiers_n, int* max_soldiers,
+                    Soldier **soldiers) {
     SDL_Event Event;
     while (SDL_PollEvent(&Event)) {
         switch (Event.type) {
@@ -41,7 +44,8 @@ void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20], Land**
                                             pow(lands[i].barrack_y - Event.button.y, 2));
                             if (d <= lands[i].barrack_r + 5) {
                                 if (*selected_land_ptr != &lands[i]) {
-                                    printf("move from %d-%d to %d-%d\n", (*selected_land_ptr)->barrack_x, (*selected_land_ptr)->barrack_y, lands[i].barrack_x, lands[i].barrack_y);
+                                    add_soldiers(soldiers_n, max_soldiers, soldiers,
+                                                 *selected_land_ptr, &lands[i]);
                                 }
                                 break;
                             }

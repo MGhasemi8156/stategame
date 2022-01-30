@@ -10,8 +10,10 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "map.h"
-
-void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20], Land** selected_land_ptr);
+#include "soldier.h"
+void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20],
+                    Land** selected_land_ptr, int *soldiers_n, int* max_soldiers,
+                    Soldier **soldiers);
 
 
 #endif
