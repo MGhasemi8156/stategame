@@ -44,15 +44,16 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
     }
     
     *soldiers_n += source->soldiers;
-    
-    source->soldiers = 0;
 }
 
 void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
     for (int i = 0; i < soldiers_n; i++) {
         if (!soldiers[i].born) { // birth check
             soldiers[i].till_birth -= 1;
-            if (soldiers[i].till_birth <= 0) soldiers[i].born = 1;
+            if (soldiers[i].till_birth <= 0) {
+                soldiers[i].born = 1;
+                (soldiers[i].source)->soldiers -= 1;
+            }
         }
         else {
             // move
