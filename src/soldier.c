@@ -60,6 +60,9 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         (*soldiers_ptr)[*soldiers_n + i] = temp;
     }
     
+    // attack queue
+    source->attack_queue = source->soldiers;
+    
     *soldiers_n += source->soldiers;
 }
 
@@ -70,6 +73,10 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
             if (soldiers[i].till_birth <= 0) {
                 soldiers[i].born = 1;
                 (soldiers[i].source)->soldiers -= 1;
+                (soldiers[i].source)->attack_queue -= 1;
+            }
+            else {
+                (soldiers[i].source)->is_attaking = 1;
             }
         }
         else {

@@ -34,6 +34,9 @@ typedef struct Land {
     int rebirth_timer;
 
     int selected;
+    
+    int attack_queue;
+    int is_attaking;
 } Land;
 
 int load_map(char file_path[100], int *lands_n, Land lands[20]);
