@@ -29,11 +29,11 @@ int main() {
 
     // set seed
     srand(time(0));
-    //sdf();
-    int lands_n = 15;
-    Land lands[lands_n];
-    create_rand_map(lands_n, lands, 3);
-    //load_rand_map("./data/maps/map1.txt", &lands_n, lands);
+    
+    int lands_n;
+    Land lands[20];
+    //create_rand_map(lands_n, lands, 3);
+    load_rand_map("./data/maps/map3.txt", &lands_n, lands);
     Land* selected_land = NULL;
 
     Soldier *soldiers = malloc(250 * sizeof(Soldier));
@@ -46,7 +46,7 @@ int main() {
         // renderer color and clear
         SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
         SDL_RenderClear(Renderer);
-        printf("%d\n", soldiers_n);
+        
         apply_rand_map(Renderer, lands_n, lands, selected_land);
         
         apply_soldiers(Renderer, soldiers_n, soldiers);
@@ -64,8 +64,9 @@ int main() {
         // set delay as FPS
         SDL_Delay(1000 / FPS);
     }
-
     // free allocated memory
-    // TODO free window and renderer
+    free(soldiers);
+    SDL_DestroyRenderer(Renderer);
+    SDL_DestroyWindow(Game_Window);
     return 0;
 }
