@@ -96,7 +96,8 @@ void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land la
     for (int i = 0; i < soldiers_n; i++) {
         // soldiers collisions
         for (int j = i + 1; j < soldiers_n; j++) { // TODO not tested
-            if (soldiers[i].side != soldiers[j].side && soldiers[i].power > 0 && soldiers[j].power > 0) {
+            if (soldiers[i].side != soldiers[j].side && soldiers[i].power > 0 && soldiers[j].power > 0 && // dead soldiers can't collide 
+                soldiers[i].born && soldiers[j].born) { // born soldiers can collide
                 double d = sqrt(pow(soldiers[i].x - soldiers[j].x, 2) +
                                 pow(soldiers[i].y - soldiers[j].y, 2));
                 if (d < 8) {
