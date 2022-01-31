@@ -4,9 +4,11 @@
 #include <math.h>
 #include <string.h>
 #include <dirent.h>
+#include <time.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+
 
 #include "map.h"
 
@@ -321,10 +323,28 @@ void take_screenshot(SDL_Renderer* Renderer) {
 }
 
 void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr) {
+    static int opacity = 100;
+    static int direction = 0;
     if (selected_land_ptr != NULL) {
         int x, y;
         SDL_GetMouseState(&x, &y);
-        SDL_RenderDrawLine(Renderer, selected_land_ptr->barrack_x, selected_land_ptr->barrack_y, x, y);
+        
+        double rx = x - selected_land_ptr->barrack_x;
+        double ry = y - selected_land_ptr->barrack_y;
+                
+        double l = sqrt(pow(rx, 2) + pow(ry, 2));
+        
+        int x1 = selected_land_ptr->barrack_x + ry/l * 7;
+        int y1 = selected_land_ptr->barrack_y - rx/l * 7;        
+        
+        int x2 = selected_land_ptr->barrack_x - ry/l * 7;
+        int y2 = selected_land_ptr->barrack_y + rx/l * 7;
+        
+        filledTrigonRGBA(Renderer, x1, y1, x2, y2, x, y, 187, 255, 0, opacity);
+        if (opacity > 250) direction = 1;
+        if (opacity < 100) direction = 0;
+        if (direction) opacity -= 5;
+        else opacity += 5;
     }
 }
 
