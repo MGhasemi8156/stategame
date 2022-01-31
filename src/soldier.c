@@ -53,6 +53,7 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         
                 
         temp.power = 1;
+        temp.can_move = 1;
     
         temp.side = source->side;
         temp.source = source;
@@ -71,7 +72,7 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
 
 void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
     for (int i = 0; i < soldiers_n; i++) {
-        if (!soldiers[i].born) { // birth check
+        if (!soldiers[i].born && soldiers[i].can_move) { // birth check
             soldiers[i].till_birth -= 1;
             if (soldiers[i].till_birth <= 0) {
                 soldiers[i].born = 1;
@@ -80,9 +81,10 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
             }
         }
         else {
-            // move
-            soldiers[i].x += soldiers[i].vx;
-            soldiers[i].y += soldiers[i].vy;
+            if (soldiers[i].can_move) {
+                soldiers[i].x += soldiers[i].vx;
+                soldiers[i].y += soldiers[i].vy;
+            }
             // draw
             filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y,
                               soldiers[i].r, get_side_normal_color(soldiers[i].side));
@@ -92,7 +94,8 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
 }
 
 
-void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land lands[]) {
+void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land lands[],
+                         int potions_n, Potion potions[]) {
     for (int i = 0; i < soldiers_n; i++) {
         // soldiers collisions
         for (int j = i + 1; j < soldiers_n; j++) {
@@ -108,7 +111,7 @@ void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land la
             }
         }
         // lands collisions
-        if (soldiers[i].power > 0) {
+        if (soldiers[i].power > 0 && soldiers[i].born) {
             double d = sqrt(pow(soldiers[i].x - (soldiers[i].destination)->barrack_x, 2) + 
                             pow(soldiers[i].y - (soldiers[i].destination)->barrack_y, 2));
             if (d < 26) {
@@ -135,7 +138,22 @@ void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land la
                 }
             }
         }
-        // TODO potions collisions
+        for (int j = 0; j < potions_n; j++) {
+            if (potions[j].target_side == -1 && soldiers[i].power > 0 && soldiers[i].born) {
+                double d = sqrt(pow(soldiers[i].x - potions[j].x, 2) +
+                                pow(soldiers[i].y - potions[j].y, 2));
+                if (d < 22) {   
+                    int had_potion = 0;
+                    for (int k = 0; k < potions_n; k++) { // one potion at a time
+                        if (potions[k].target_side == soldiers[i].side) {
+                            had_potion = 1; 
+                            break;
+                        }
+                    }
+                    if (!had_potion) potions[j].target_side = soldiers[i].side;
+                }
+            }
+        }
     }
 }
 

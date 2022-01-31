@@ -15,6 +15,7 @@
 #define MAX_POTIONS 4
 
 
+
 typedef struct Potion {
     double x;
     double y;
@@ -24,6 +25,10 @@ typedef struct Potion {
     int target_side;
     int life_time;
 } Potion;
+
+
+// include header in each other
+typedef struct Soldier Soldier;
 
 void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]);
 

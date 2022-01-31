@@ -10,6 +10,7 @@
 #include <SDL2/SDL2_gfxPrimitives.h>
 
 #include "map.h"
+#include "potion.h"
 
 #define VF 3 // velocity factor
 #define TILL_BIRTH_FACTOR 7
@@ -30,6 +31,9 @@ typedef struct Soldier {
     int side;
     Land* source;
     Land* destination;
+
+    // potion stuff
+    int can_move;
     
 } Soldier;
 
@@ -38,7 +42,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
 
 void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers); 
 
-void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land lands[]);
+void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land lands[],
+                         int potions_n, Potion potions[]);
 
 void remove_zero_power_soldiers(int* soldiers_n, Soldier *soldiers);
 #endif
