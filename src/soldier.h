@@ -11,6 +11,10 @@
 
 #include "map.h"
 
+#define VF 3 // velocity factor
+#define TILL_BIRTH_FACTOR 7
+
+
 typedef struct Soldier {
     int till_birth;
     int born;

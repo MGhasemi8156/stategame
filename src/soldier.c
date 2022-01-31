@@ -21,7 +21,7 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
     for (int i = 0; i < source->soldiers; i++) {
         Soldier temp;
         
-        temp.till_birth = (i/3) * 7; // spawn three at a time
+        temp.till_birth = (i/3) * TILL_BIRTH_FACTOR; // spawn three at a time
         temp.born = 0;
         
         temp.x = (double)source->barrack_x;
@@ -32,8 +32,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         double l = sqrt(pow((destination->barrack_x - temp.x), 2) +
                         pow((destination->barrack_y - temp.y), 2));
         
-        temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * 3;
-        temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * 3;
+        temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * VF;
+        temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * VF;
         
         // move to the boundry of barrack
         temp.x += temp.vx * 10;
@@ -85,7 +85,7 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
             soldiers[i].y += soldiers[i].vy;
             // draw
             filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y,
-                              soldiers[i].r, get_side_normal_color(soldiers[i].side)); // TODO color on side
+                              soldiers[i].r, get_side_normal_color(soldiers[i].side));
             
         }
     }
@@ -95,7 +95,7 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
 void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land lands[]) {
     for (int i = 0; i < soldiers_n; i++) {
         // soldiers collisions
-        for (int j = i + 1; j < soldiers_n; j++) { // TODO not tested
+        for (int j = i + 1; j < soldiers_n; j++) {
             if (soldiers[i].side != soldiers[j].side && soldiers[i].power > 0 && soldiers[j].power > 0 && // dead soldiers can't collide 
                 soldiers[i].born && soldiers[j].born) { // born soldiers can collide
                 double d = sqrt(pow(soldiers[i].x - soldiers[j].x, 2) +
@@ -127,9 +127,9 @@ void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land la
                         (soldiers[i].destination)->soldiers = soldiers[i].power - (soldiers[i].destination)->soldiers;
                         (soldiers[i].destination)->side = soldiers[i].side;
                         // set new values if was impartial
-                        (soldiers[i].destination)->rebirth_rate = 60;
-                        (soldiers[i].destination)->rebirth_timer = 60;
-                        (soldiers[i].destination)->max_soldiers = 50;
+                        (soldiers[i].destination)->rebirth_rate = REBIRTH_RATE;
+                        (soldiers[i].destination)->rebirth_timer = REBIRTH_RATE;
+                        (soldiers[i].destination)->max_soldiers = MAX_SOLDIERS;
                         soldiers[i].power = 0;
                     }
                 }
