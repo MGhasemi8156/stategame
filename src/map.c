@@ -11,12 +11,18 @@
 #include "map.h"
 
 
+
 void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n);
+
 void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack, int barrack_r,
                     int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer);
+
+void take_screenshot(SDL_Renderer* Renderer);
+
 void smooth_map(int map[100][100]);
 
-char* get_new_file_name(); 
+int get_new_file_number(); 
+
 void get_land_coordinates(int* x, int* y);
 
 Uint32 get_side_normal_color(int side);
@@ -24,12 +30,16 @@ Uint32 get_land_normal_color(int side);
 
 void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr);
 
+int new_file_number = -1;
+int image_saved = 0;
+
 
 void create_rand_map(int lands_n, Land lands[], int players) {
     // open file to save rand map
-    char *file_name = get_new_file_name();
+    new_file_number = get_new_file_number();
+    char file_name[50];
+    sprintf(file_name, "./data/maps/map%d.txt", new_file_number);
     FILE* map_file_ptr = fopen(file_name, "w");
-    free(file_name);
     
     // add number of lands to file
     fprintf(map_file_ptr, "%d\n", lands_n);
@@ -246,14 +256,16 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
         }
     }
     
+    // take screenshot of map
+    if (new_file_number != -1 && !image_saved) {
+        take_screenshot(Renderer);    
+    }
+
     // draw attack line
     draw_attack_line(Renderer, selected_land_ptr);
 }
 
-char* get_new_file_name() {
-    char* file_name = malloc(50);
-    *file_name = '\0';
-    
+int get_new_file_number() {
     DIR *maps_dir;
     struct dirent *dir;
     maps_dir = opendir("./data/maps");
@@ -265,14 +277,8 @@ char* get_new_file_name() {
         }
         file_number--; // for . and ..
     }
-    else fprintf(stderr, "can not find ./data/maps\n");
     
-    char temp[50];
-    sprintf(temp, "./data/maps/map%d.txt", file_number);
-
-    strcat(file_name, temp);
-    
-    return file_name;
+    return file_number;
 }
 
 void get_land_coordinates(int* x, int* y) {
@@ -299,6 +305,21 @@ void get_land_coordinates(int* x, int* y) {
 
 }
 
+void take_screenshot(SDL_Renderer* Renderer) {
+    char file_name[50];
+    sprintf(file_name, "./data/screenshots/map%d.bmp", new_file_number);
+    // Get width and height of screen
+    SDL_DisplayMode DM;
+    SDL_GetCurrentDisplayMode(0, &DM);
+    
+    SDL_Surface* screenshot = SDL_CreateRGBSurface(0, DM.w, DM.h, 32, 0x00ff0000,
+                              0x0000ff00, 0x000000ff, 0xff000000);
+    SDL_RenderReadPixels(Renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenshot->pixels, screenshot->pitch);
+    SDL_SaveBMP(screenshot, file_name);
+    SDL_FreeSurface(screenshot);
+    
+    image_saved = 1;
+}
 
 void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr) {
     if (selected_land_ptr != NULL) {
