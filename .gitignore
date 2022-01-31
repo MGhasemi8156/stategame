@@ -6,3 +6,4 @@ state
 
 data/maps/*.txt
 data/maps/*.bin
+data/screenshots/*.bmp
