@@ -63,6 +63,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
     
     // attack queue
     source->attack_queue = source->soldiers;
+    // to avoid mutiple attack
+    source->is_attaking = 1;
     
     *soldiers_n += source->soldiers;
 }
@@ -75,9 +77,6 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
                 soldiers[i].born = 1;
                 (soldiers[i].source)->soldiers -= 1;
                 (soldiers[i].source)->attack_queue -= 1;
-            }
-            else {
-                (soldiers[i].source)->is_attaking = 1;
             }
         }
         else {
@@ -98,7 +97,7 @@ void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land la
         // soldiers collisions
         for (int j = i + 1; j < soldiers_n; j++) { // TODO not tested
             if (soldiers[i].side != soldiers[j].side && soldiers[i].power > 0 && soldiers[j].power > 0) {
-                double d = sqrt(pow(soldiers[i].x - soldiers[j].y, 2) +
+                double d = sqrt(pow(soldiers[i].x - soldiers[j].x, 2) +
                                 pow(soldiers[i].y - soldiers[j].y, 2));
                 if (d < 8) {
                     int temp = soldiers[i].power;
