@@ -9,9 +9,22 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 
+#define REBIRTH_RATE 60
+#define IMPARTIAL_REBIRTH_RATE 120
+
+#define BARRACK_R 25
+
+#define MAX_SOLDIERS 50
+#define IMPARTIAL_MAX_SOLDIERS 20
+
+#define L 100 // pixels array w and h
+#define F 3   // pixels factor
+#define W 4   // pixels w and h
+
+
 typedef struct Land {   
     // for rand Land
-    int pixels[100][100];
+    int pixels[L][L];
 
     int has_barrack;
     int side;

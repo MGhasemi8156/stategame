@@ -11,15 +11,14 @@
 #include "map.h"
 
 
+void rand_BFS(int iterator, int map[L][L], int to_check[500][2], int n);
 
-void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n);
-
-void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack, int barrack_r,
+void save_rand_land(FILE *map_file_ptr, int map[L][L], int x, int y, int has_barrack, int barrack_r,
                     int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer);
 
 void take_screenshot(SDL_Renderer* Renderer);
 
-void smooth_map(int map[100][100]);
+void smooth_map(int map[L][L]);
 
 int get_new_file_number(); 
 
@@ -50,13 +49,13 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     
     for (int i = 1; i < players + 1; i++) { // i refers to side
         for (int j = 0; j < share; j++) {
-            int map[100][100] = {0};
-            int to_check[500][2] = {{50, 50}};
+            int map[L][L] = {0};
+            int to_check[500][2] = {{L/2, L/2}};
 
             rand_BFS(0, map, to_check, 1);
             smooth_map(map);        
     
-            memcpy(lands[lands_i].pixels, map, 100 * 100 * sizeof(int));
+            memcpy(lands[lands_i].pixels, map, L * L * sizeof(int));
             
             lands[lands_i].has_barrack = 1;
             lands[lands_i].side = i;
@@ -64,12 +63,12 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             get_land_coordinates(&x, &y);
             lands[lands_i].barrack_x = x;
             lands[lands_i].barrack_y = y;
-            lands[lands_i].barrack_r = 25;
+            lands[lands_i].barrack_r = BARRACK_R;
             
             lands[lands_i].soldiers = 12; // TODO change later
-            lands[lands_i].max_soldiers = 50;
-            lands[lands_i].rebirth_rate = 60;
-            lands[lands_i].rebirth_timer = 60;
+            lands[lands_i].max_soldiers = MAX_SOLDIERS;
+            lands[lands_i].rebirth_rate = REBIRTH_RATE;
+            lands[lands_i].rebirth_timer = REBIRTH_RATE;
            
             lands[lands_i].selected = 0;
             lands[lands_i].is_attaking = 0;
@@ -86,13 +85,13 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     // lands with no side
     int impartials = lands_n - lands_i;
     for (int i = 0; i < impartials; i++) {
-        int map[100][100] = {0};
-        int to_check[500][2] = {{50, 50}};       
+        int map[L][L] = {0};
+        int to_check[500][2] = {{L/2, L/2}};       
 
         rand_BFS(0, map, to_check, 1);
         smooth_map(map);
 
-        memcpy(lands[lands_i].pixels, map, 100 * 100 * sizeof(int));
+        memcpy(lands[lands_i].pixels, map, L * L * sizeof(int));
         
         lands[lands_i].has_barrack = 1;
         lands[lands_i].side = 0;
@@ -100,12 +99,12 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         get_land_coordinates(&x, &y);
         lands[lands_i].barrack_x = x;
         lands[lands_i].barrack_y = y;
-        lands[lands_i].barrack_r = 25;
+        lands[lands_i].barrack_r = BARRACK_R;
         
-        lands[lands_i].soldiers = 12; // TODO change later
-        lands[lands_i].max_soldiers = 20;
-        lands[lands_i].rebirth_rate = 120;
-        lands[lands_i].rebirth_timer = 120;
+        lands[lands_i].soldiers = 12;
+        lands[lands_i].max_soldiers = IMPARTIAL_MAX_SOLDIERS;
+        lands[lands_i].rebirth_rate = IMPARTIAL_REBIRTH_RATE;
+        lands[lands_i].rebirth_timer = IMPARTIAL_REBIRTH_RATE;
 
         lands[lands_i].selected = 0;
         lands[lands_i].is_attaking = 0;
@@ -120,12 +119,12 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     }
 }
 
-void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n) {
+void rand_BFS(int iterator, int map[L][L], int to_check[500][2], int n) {
     if (iterator == 50) return;
     int ss[500][2];
     int l = 0;
     for (int i = 0; i < n; i++) {
-        if (to_check[i][0] + 1  < 100 && map[to_check[i][0] + 1][to_check[i][1]] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
+        if (to_check[i][0] + 1  < L && map[to_check[i][0] + 1][to_check[i][1]] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
             map[to_check[i][0] + 1][to_check[i][1]] = 1;
             ss[l][0] = to_check[i][0] + 1;
             ss[l][1] = to_check[i][1];
@@ -137,7 +136,7 @@ void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n) {
             ss[l][1] = to_check[i][1];
             l++;
         }
-        if (to_check[i][1] + 1 < 100 && map[to_check[i][0]][to_check[i][1] + 1] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
+        if (to_check[i][1] + 1 < L && map[to_check[i][0]][to_check[i][1] + 1] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
             map[to_check[i][0]][to_check[i][1] + 1] = 1;
             ss[l][0] = to_check[i][0];
             ss[l][1] = to_check[i][1] + 1;
@@ -153,9 +152,9 @@ void rand_BFS(int iterator, int map[100][100], int to_check[500][2], int n) {
     rand_BFS(iterator + 1, map, ss, l);
 }
 
-void smooth_map(int map[100][100]) {
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) { 
+void smooth_map(int map[L][L]) {
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < L; j++) { 
             if (map[i][j] == 0) {
                 int adjacents = 0;
                 if (j > 0 && map[i][j - 1] == 1) adjacents++;
@@ -173,12 +172,12 @@ void smooth_map(int map[100][100]) {
 
 }
 
-void save_rand_land(FILE *map_file_ptr, int map[100][100], int x, int y, int has_barrack, int barrack_r,
+void save_rand_land(FILE *map_file_ptr, int map[L][L], int x, int y, int has_barrack, int barrack_r,
                     int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer) {
     fprintf(map_file_ptr, "%d %d %d %d %d %d %d %d %d\n", x, y, has_barrack, barrack_r, side, soldiers,
                                                           max_soldiers, rebirth_rate, rebirth_timer);
-    for (int i = 0; i < 100; i++) {
-        for (int j = 0; j < 100; j++) {
+    for (int i = 0; i < L; i++) {
+        for (int j = 0; j < L; j++) {
             fprintf(map_file_ptr, "%d ", map[i][j]);
         }
         fprintf(map_file_ptr, "\n");
@@ -205,8 +204,8 @@ int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
         lands[i].is_attaking = 0;
         lands[i].attack_queue = 0;
 
-        for (int m = 0; m < 100; m++) {
-            for (int n = 0; n < 100; n++) {
+        for (int m = 0; m < L; m++) {
+            for (int n = 0; n < L; n++) {
                 fscanf(file_ptr, "%d", &lands[i].pixels[m][n]);
             }
         }
@@ -218,11 +217,11 @@ int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
 void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* selected_land_ptr) {
     for (int i = 0; i < lands_n; i++) {
         // draw land with 5x5 pixels
-        for (int m = 0; m < 100; m++) {
-            for (int n = 0; n < 100; n++) {
+        for (int m = 0; m < L; m++) {
+            for (int n = 0; n < L; n++) {
                 if (lands[i].pixels[m][n] == 1) {
-                    boxColor(Renderer, lands[i].barrack_x - (50 - m) * 3, lands[i].barrack_y - (50 - n) * 3,
-                    lands[i].barrack_x - (50 - m) * 3 + 4, lands[i].barrack_y - (50 - n) * 3 + 4, get_land_normal_color(lands[i].side));
+                    boxColor(Renderer, lands[i].barrack_x - (L/2 - m) * F, lands[i].barrack_y - (L/2 - n) * F,
+                    lands[i].barrack_x - (L/2 - m) * F + W, lands[i].barrack_y - (L/2 - n) * F + W, get_land_normal_color(lands[i].side));
                 }
             }
         }
