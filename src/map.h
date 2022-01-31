@@ -9,15 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
 
-typedef struct Land {
-    // for Land from .bmp
-    char path[100];
-    int x;
-    int y;
-    int width;
-    int height;
-    double angle;
-    
+typedef struct Land {   
     // for rand Land
     int pixels[100][100];
 
@@ -38,10 +30,6 @@ typedef struct Land {
     int attack_queue;
     int is_attaking;
 } Land;
-
-int load_map(char file_path[100], int *lands_n, Land lands[20]);
-
-void apply_map(SDL_Renderer* Renderer, int lands_n, Land lands[20], Land* selected_land_ptr);
 
 void create_rand_map(int lands_n, Land lands[], int players);
 
