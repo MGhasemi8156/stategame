@@ -231,6 +231,33 @@ src/map.c.s:
 	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/map.c.s
 .PHONY : src/map.c.s
 
+src/potion.o: src/potion.c.o
+
+.PHONY : src/potion.o
+
+# target to build an object file
+src/potion.c.o:
+	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/potion.c.o
+.PHONY : src/potion.c.o
+
+src/potion.i: src/potion.c.i
+
+.PHONY : src/potion.i
+
+# target to preprocess a source file
+src/potion.c.i:
+	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/potion.c.i
+.PHONY : src/potion.c.i
+
+src/potion.s: src/potion.c.s
+
+.PHONY : src/potion.s
+
+# target to generate assembly for a file
+src/potion.c.s:
+	$(MAKE) -f CMakeFiles/state.dir/build.make CMakeFiles/state.dir/src/potion.c.s
+.PHONY : src/potion.c.s
+
 src/soldier.o: src/soldier.c.o
 
 .PHONY : src/soldier.o
@@ -279,6 +306,9 @@ help:
 	@echo "... src/map.o"
 	@echo "... src/map.i"
 	@echo "... src/map.s"
+	@echo "... src/potion.o"
+	@echo "... src/potion.i"
+	@echo "... src/potion.s"
 	@echo "... src/soldier.o"
 	@echo "... src/soldier.i"
 	@echo "... src/soldier.s"
