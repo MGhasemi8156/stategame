@@ -85,7 +85,8 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
             soldiers[i].x += soldiers[i].vx;
             soldiers[i].y += soldiers[i].vy;
             // draw
-            filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y, soldiers[i].r, 0xffff0000); // TODO color on side
+            filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y,
+                              soldiers[i].r, get_side_normal_color(soldiers[i].side)); // TODO color on side
             
         }
     }
@@ -149,3 +150,4 @@ void remove_zero_power_soldiers(int* soldiers_n, Soldier *soldiers) {
     
     *soldiers_n = soldiers_i;
 }
+

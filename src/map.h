@@ -49,4 +49,6 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
 
 int load_rand_map(char file_path[100], int *lands_n, Land lands[]);
 
+Uint32 get_side_normal_color(int side);
+
 #endif
