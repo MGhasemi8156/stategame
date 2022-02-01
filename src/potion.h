@@ -24,9 +24,10 @@
 
 // increase velocity potion. type: 2
 #define INCREASE_VELOCITY_FACTOR 3
-#define INCREASE_VELOCITY_DURATIONS 300
+#define INCREASE_VELOCITY_DURATION 300
 
-
+// unlimited rebirth. type: 3
+#define UNLIMITED_REBIRTH_DURATION 300
 
 
 typedef struct Potion {

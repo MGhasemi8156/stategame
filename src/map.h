@@ -46,6 +46,9 @@ typedef struct Land {
     
     int attack_queue;
     int is_attaking;
+    
+    // potions stuff4
+    int unlimited_rebirth;
 } Land;
 
 void create_rand_map(int lands_n, Land lands[], int players);

@@ -16,7 +16,10 @@ void stop_enemies(int target_side, int soldiers_n, Soldier *soldiers);
 void end_stop_enemies(int target_side, int soldiers_n, Soldier *soldiers);
 
 void increase_velocity(int target_side, int soldiers_n, Soldier *soldiers);
-void end_increse_velocity(int target_side, int soldiers_n, Soldier *soldiers);
+void end_increase_velocity(int target_side, int soldiers_n, Soldier *soldiers);
+
+void unlimited_rebirth(int target_side, int lands_n, Land lands[]);
+void end_unlimited_rebirth(int target_side, int lands_n, Land lands[]);
 
 void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
     if (*potions_n < MAX_POTIONS) {
@@ -33,7 +36,7 @@ void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
                     temp.x = lands[i].barrack_x + rx * rand_factor;
                     temp.y = lands[i].barrack_y + ry * rand_factor;
                     
-                    temp.type = 2; // TODO change randonm value
+                    temp.type = 3; // TODO change randonm value
                     temp.target_side = -1;
                     temp.till_end = 600; // TODO change
                     
@@ -69,6 +72,9 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
                     case 2:
                         increase_velocity(potions[i].target_side, soldiers_n, soldiers);
                         break;
+                    case 3:
+                        unlimited_rebirth(potions[i].target_side, lands_n, lands);
+                        break;
                 }
             }
             else {
@@ -77,7 +83,10 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
                         end_stop_enemies(potions[i].target_side, soldiers_n, soldiers);
                         break;
                     case 2:
-                        end_increse_velocity(potions[i].target_side, soldiers_n, soldiers);
+                        end_increase_velocity(potions[i].target_side, soldiers_n, soldiers);
+                        break;
+                    case 3:
+                        end_unlimited_rebirth(potions[i].target_side, lands_n, lands);
                         break;
                 }
             }
@@ -116,10 +125,21 @@ void increase_velocity(int target_side, int soldiers_n, Soldier *soldiers) {
     }
 }
 
-void end_increse_velocity(int target_side, int soldiers_n, Soldier *soldiers) {
+void end_increase_velocity(int target_side, int soldiers_n, Soldier *soldiers) {
     for (int i = 0; i < soldiers_n; i++) {
         if (soldiers[i].side == target_side) soldiers[i].velocity_factor = 1;
     }
 
 }
 
+void unlimited_rebirth(int target_side, int lands_n, Land lands[]) {
+    for (int i = 0; i < lands_n; i++) {
+        if (lands[i].side == target_side) lands[i].unlimited_rebirth = 1;
+    }
+}
+
+void end_unlimited_rebirth(int target_side, int lands_n, Land lands[]) {
+    for (int i = 0; i < lands_n; i++) {
+        if (lands[i].side == target_side) lands[i].unlimited_rebirth = 0;
+    }
+}
