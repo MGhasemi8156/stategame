@@ -24,8 +24,8 @@ building instructions ... .
 - [x] save rebirth stuff in .txt file
 - [ ] save game
 - [x] take screen shot of new map
-- [ ] define const
-- [ ] error handling
+- [x] define const
+- [x] error handling
 ### soldier:
 - [x] struct Soldier
 - [x] add_soldiers()
@@ -35,17 +35,18 @@ building instructions ... .
 - [x] check soldiers collisions to work properly 
 - [x] move in paralel lines
 - [x] collision detection for potions
-- [ ] define consts
-- [ ] error handling 
+- [x] define consts
+- [x] error handling 
 ### events:
 - [x] event_listener()
 ### potions:
 - [ ] create and add potions
 - [x] create stop_enemy potion
-- [ ] create increase velocity potion
+- [x] create increase velocity potion
 - [ ] create no limit birth potions
 - [ ] create increse rebirth rate potion  
 - [ ] make specefic shape and color for potoins
+- [ ] add potions timer 
 - [ ] define consts
 - [ ] error handling
 ### ai:
