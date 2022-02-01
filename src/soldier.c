@@ -13,8 +13,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
                   Land* source, Land* destination) {
     // extend the memory if needed
     if (*soldiers_n + source->soldiers > *max_soldiers) {
-        *soldiers_ptr = realloc(*soldiers_ptr, sizeof(Soldier) * (*max_soldiers + 250));
-        *max_soldiers += 250;
+        *soldiers_ptr = realloc(*soldiers_ptr, sizeof(Soldier) * (*max_soldiers + MAX_SOLDIERS_STEP));
+        *max_soldiers += MAX_SOLDIERS_STEP;
     }
     
     // add soldiers
@@ -27,13 +27,13 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         temp.x = (double)source->barrack_x;
         temp.y = (double)source->barrack_y;        
 
-        temp.r = 5; // TODO change
+        temp.r = SOLDIER_R; // TODO change
         
         double l = sqrt(pow((destination->barrack_x - temp.x), 2) +
                         pow((destination->barrack_y - temp.y), 2));
         
-        temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * VF;
-        temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * VF;
+        temp.vx = ((double)destination->barrack_x - (double)temp.x)/l * INITIAL_VELOCITY_FACOTR;
+        temp.vy = ((double)destination->barrack_y - (double)temp.y)/l * INITIAL_VELOCITY_FACOTR;
         
         // move to the boundry of barrack
         temp.x += temp.vx * 10;
@@ -51,15 +51,17 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
                 break;
         }
         
-                
         temp.power = 1;
-        temp.can_move = 1;
-        temp.velocity_factor = 1;
-    
+
         temp.side = source->side;
         temp.source = source;
         temp.destination = destination;
         
+        // potions stuff        
+        temp.can_move = 1;
+        temp.velocity_factor = 1;
+    
+        // add to array
         (*soldiers_ptr)[*soldiers_n + i] = temp;
     }
     
