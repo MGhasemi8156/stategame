@@ -54,12 +54,13 @@ int main() {
         
         apply_rand_map(Renderer, lands_n, lands, selected_land);
         
-        apply_soldiers(Renderer, soldiers_n, soldiers);
 
         add_potion(&potions_n, potions, lands_n, lands);
         apply_potions(Renderer, potions_n, potions, lands_n, lands, soldiers_n, soldiers);
         remove_expired_potions(&potions_n, potions);
         
+        apply_soldiers(Renderer, soldiers_n, soldiers);
+       
         collision_detection(soldiers_n, soldiers, lands_n, lands, potions_n, potions);
         
         remove_zero_power_soldiers(&soldiers_n, soldiers);        
