@@ -13,6 +13,11 @@
 #include "soldier.h"
 
 #define MAX_POTIONS 4
+#define RAND_CREATION_RATE 1500
+
+
+#define POTION_SIDES 6
+#define POTION_R 20
 
 // stop enemy potion. type: 1
 #define STOP_ENEMY_DURATION 600 // 10s

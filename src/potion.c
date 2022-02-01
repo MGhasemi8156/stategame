@@ -22,10 +22,11 @@ void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
     if (*potions_n < MAX_POTIONS) {
         for (int i = 0; i < lands_n; i++) {
             for (int j = i + 1; j < lands_n; j++) {
-                if (rand()%60000 == 0) {
+                if (rand()%RAND_CREATION_RATE == 0) {
                     double rx = lands[j].barrack_x - lands[i].barrack_x;
                     double ry = lands[j].barrack_y - lands[i].barrack_y;
                     
+                    // refer to place of potion between tow lands
                     double rand_factor = ((double)(rand()%5 + 1)) / 6;
                     
                     Potion temp;
@@ -48,17 +49,17 @@ void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
 void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
                    int lands_n, Land lands[], int soldiers_n, Soldier *soldiers) {
     for (int i = 0; i < postions_n; i++) {
-        Sint16 vx[6];
-        Sint16 vy[6];
-        for (int k = 0; k < 6; k++) {
-            vx[k] = potions[i].x + cos(PI/3 * k) * 20;
-            vy[k] = potions[i].y + sin(PI/3 * k) * 20;
+        Sint16 vx[POTION_SIDES];
+        Sint16 vy[POTION_SIDES];
+        for (int k = 0; k < POTION_SIDES; k++) {
+            vx[k] = potions[i].x + cos(PI/(POTION_SIDES / 2) * k) * POTION_R;
+            vy[k] = potions[i].y + sin(PI/(POTION_SIDES / 2) * k) * POTION_R;
         }
         if (potions[i].target_side == -1) {
-            filledPolygonColor(Renderer, vx, vy, 6, 0xaaff0000);
+            filledPolygonColor(Renderer, vx, vy, POTION_SIDES, 0xaaff0000);
         }
         else {
-            filledPolygonColor(Renderer, vx, vy, 6, 0x55ff0000);
+            filledPolygonColor(Renderer, vx, vy, POTION_SIDES, 0x55ff0000);
             potions[i].till_end -= 1;
             if (potions[i].till_end > 0) {
                 switch (potions[i].type) {
