@@ -13,8 +13,10 @@
 #define PI 3.14159265
 
 void stop_enemies(int target_side, int soldiers_n, Soldier *soldiers);
-
 void end_stop_enemies(int target_side, int soldiers_n, Soldier *soldiers);
+
+void increase_velocity(int target_side, int soldiers_n, Soldier *soldiers);
+void end_increse_velocity(int target_side, int soldiers_n, Soldier *soldiers);
 
 void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
     if (*potions_n < MAX_POTIONS) {
@@ -29,11 +31,10 @@ void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
                     Potion temp;
                     temp.x = lands[i].barrack_x + rx * rand_factor;
                     temp.y = lands[i].barrack_y + ry * rand_factor;
-                    temp.n = 10;
                     
-                    temp.type = 1; // TODO change randonm value
+                    temp.type = 2; // TODO change randonm value
                     temp.target_side = -1;
-                    temp.life_time = 600; // TODO change
+                    temp.till_end = 600; // TODO change
                     
                     potions[*potions_n] = temp;
                     *potions_n += 1;
@@ -58,11 +59,14 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
         }
         else {
             filledPolygonColor(Renderer, vx, vy, 6, 0x55ff0000);
-            potions[i].life_time -= 1;
-            if (potions[i].life_time > 0) {
+            potions[i].till_end -= 1;
+            if (potions[i].till_end > 0) {
                 switch (potions[i].type) {
                     case 1:
                         stop_enemies(potions[i].target_side, soldiers_n, soldiers);
+                        break;
+                    case 2:
+                        increase_velocity(potions[i].target_side, soldiers_n, soldiers);
                         break;
                 }
             }
@@ -70,6 +74,9 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
                 switch (potions[i].type) {
                     case 1:
                         end_stop_enemies(potions[i].target_side, soldiers_n, soldiers);
+                        break;
+                    case 2:
+                        end_increse_velocity(potions[i].target_side, soldiers_n, soldiers);
                         break;
                 }
             }
@@ -80,7 +87,7 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
 void remove_expired_potions(int* potions_n, Potion potions[]) {
     int potions_i = 0;  
     for (int i = 0; i < *potions_n; i++) {
-        if (potions[i].life_time > 0) {
+        if (potions[i].till_end > 0) {
             potions[potions_i] = potions[i];
             potions_i++;
         }
@@ -101,3 +108,17 @@ void end_stop_enemies(int target_side, int soldiers_n, Soldier *soldiers) {
         if (soldiers[i].side != target_side) soldiers[i].can_move = 1;
     }
 }
+
+void increase_velocity(int target_side, int soldiers_n, Soldier *soldiers) {
+    for (int i = 0; i < soldiers_n; i++) {
+        if (soldiers[i].side == target_side) soldiers[i].velocity_factor = INCREASE_VELOCITY_FACTOR;
+    }
+}
+
+void end_increse_velocity(int target_side, int soldiers_n, Soldier *soldiers) {
+    for (int i = 0; i < soldiers_n; i++) {
+        if (soldiers[i].side == target_side) soldiers[i].velocity_factor = 1;
+    }
+
+}
+

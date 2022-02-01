@@ -54,6 +54,7 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
                 
         temp.power = 1;
         temp.can_move = 1;
+        temp.velocity_factor = 1;
     
         temp.side = source->side;
         temp.source = source;
@@ -82,8 +83,8 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
         }
         else {
             if (soldiers[i].can_move) {
-                soldiers[i].x += soldiers[i].vx;
-                soldiers[i].y += soldiers[i].vy;
+                soldiers[i].x += soldiers[i].vx * soldiers[i].velocity_factor;
+                soldiers[i].y += soldiers[i].vy * soldiers[i].velocity_factor;
             }
             // draw
             filledCircleColor(Renderer, (Sint16)soldiers[i].x, (Sint16)soldiers[i].y,

@@ -14,16 +14,23 @@
 
 #define MAX_POTIONS 4
 
+// stop enemy potion. type: 1
+#define STOP_ENEMY_DURATION 600 // 10s
+
+// increase velocity potion. type: 2
+#define INCREASE_VELOCITY_FACTOR 3
+#define INCREASE_VELOCITY_DURATIONS 300
+
+
 
 
 typedef struct Potion {
     double x;
     double y;
-    int n;
     
     int type;
     int target_side;
-    int life_time;
+    int till_end;
 } Potion;
 
 

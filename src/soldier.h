@@ -34,6 +34,7 @@ typedef struct Soldier {
 
     // potion stuff
     int can_move;
+    int velocity_factor;
     
 } Soldier;
 
