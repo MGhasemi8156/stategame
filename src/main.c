@@ -34,7 +34,7 @@ int main() {
     
     int lands_n = 17;
     Land lands[MAX_LANDS];
-    create_rand_map(lands_n, lands, 6);
+    create_rand_map(lands_n, lands, 1);
     //load_rand_map("./data/maps/map3.txt", &lands_n, lands);
     Land* selected_land = NULL;
 

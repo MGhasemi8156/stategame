@@ -20,14 +20,18 @@
 #define POTION_R 20
 
 // stop enemy potion. type: 1
-#define STOP_ENEMY_DURATION 600 // 10s
+#define STOP_ENEMY_DURATION 600
 
 // increase velocity potion. type: 2
 #define INCREASE_VELOCITY_FACTOR 3
 #define INCREASE_VELOCITY_DURATION 300
 
-// unlimited rebirth. type: 3
+// unlimited rebirth potion. type: 3
 #define UNLIMITED_REBIRTH_DURATION 300
+
+// increase rebirth rate potion. type: 4
+#define INCREASE_REBIRTH_RATE_VALUE 30
+#define INCREASE_REBIRTH_RATE_DURATION 300
 
 
 typedef struct Potion {

@@ -21,6 +21,9 @@ void end_increase_velocity(int target_side, int soldiers_n, Soldier *soldiers);
 void unlimited_rebirth(int target_side, int lands_n, Land lands[]);
 void end_unlimited_rebirth(int target_side, int lands_n, Land lands[]);
 
+void increase_rebirth_rate(int target_side, int lands_n, Land lands[]);
+void end_increase_rebirth_rate(int target_side, int lands_n, Land lands[]);
+
 void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
     if (*potions_n < MAX_POTIONS) {
         for (int i = 0; i < lands_n; i++) {
@@ -36,7 +39,7 @@ void add_potion(int* potions_n, Potion potions[], int lands_n, Land lands[]) {
                     temp.x = lands[i].barrack_x + rx * rand_factor;
                     temp.y = lands[i].barrack_y + ry * rand_factor;
                     
-                    temp.type = 3; // TODO change randonm value
+                    temp.type = 4; // TODO change randonm value
                     temp.target_side = -1;
                     temp.till_end = 600; // TODO change
                     
@@ -75,6 +78,9 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
                     case 3:
                         unlimited_rebirth(potions[i].target_side, lands_n, lands);
                         break;
+                    case 4: 
+                        increase_rebirth_rate(potions[i].target_side, lands_n, lands);
+                        break;
                 }
             }
             else {
@@ -87,6 +93,9 @@ void apply_potions(SDL_Renderer* Renderer, int postions_n, Potion potions[],
                         break;
                     case 3:
                         end_unlimited_rebirth(potions[i].target_side, lands_n, lands);
+                        break;
+                    case 4:
+                        end_increase_rebirth_rate(potions[i].target_side, lands_n, lands);
                         break;
                 }
             }
@@ -141,5 +150,21 @@ void unlimited_rebirth(int target_side, int lands_n, Land lands[]) {
 void end_unlimited_rebirth(int target_side, int lands_n, Land lands[]) {
     for (int i = 0; i < lands_n; i++) {
         if (lands[i].side == target_side) lands[i].unlimited_rebirth = 0;
+    }
+}
+
+void increase_rebirth_rate(int target_side, int lands_n, Land lands[]) {
+    for (int i = 0; i < lands_n; i++) {
+        if (lands[i].side == target_side) {
+            lands[i].rebirth_rate = INCREASE_REBIRTH_RATE_VALUE;
+        }
+    }
+}
+
+void end_increase_rebirth_rate(int target_side, int lands_n, Land lands[]) {
+    for (int i = 0; i < lands_n; i++) {
+        if (lands[i].side == target_side) {
+            lands[i].rebirth_rate = REBIRTH_RATE;
+        }
     }
 }
