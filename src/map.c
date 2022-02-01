@@ -379,21 +379,19 @@ Uint32 get_side_normal_color(int side) {
         case 4: return 0xff66e3e3;
         case 5: return 0xffe366db;
         case 6: return 0xff739feb;
-        case 7: return 0xff9866e3;
         default: return 0xffcfcdcc;
     }
 }
 
 Uint32 get_land_normal_color(int side) {
     switch (side) {
-        case 0: return 0xff696966;
-        case 1: return 0xff6e3a1a;
-        case 2: return 0xff2b2d94;
-        case 3: return 0xff479152;
-        case 4: return 0xff439c9c;
-        case 5: return 0xff753471;
-        case 6: return 0xff41629c;
-        case 7: return 0xff6c46a6;
+        case 0: return 0xffd4d4cd;
+        case 1: return 0xfffaad7d;
+        case 2: return 0xff8587ff;
+        case 3: return 0xff9ff5ac;
+        case 4: return 0xff96ffff;
+        case 5: return 0xffff82f7;
+        case 6: return 0xff94bbff;
         default: return 0xff696966;
     }
 }

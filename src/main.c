@@ -32,9 +32,9 @@ int main() {
     // set seed
     srand(time(0));
     
-    int lands_n = 12;
+    int lands_n = 17;
     Land lands[MAX_LANDS];
-    create_rand_map(lands_n, lands, 3);
+    create_rand_map(lands_n, lands, 6);
     //load_rand_map("./data/maps/map3.txt", &lands_n, lands);
     Land* selected_land = NULL;
 

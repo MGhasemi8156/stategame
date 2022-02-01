@@ -11,6 +11,7 @@
 
 
 #define MAX_LANDS 20
+#define MAX_SIDES 6
 
 #define REBIRTH_RATE 60
 #define IMPARTIAL_REBIRTH_RATE 120
