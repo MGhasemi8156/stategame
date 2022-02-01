@@ -13,14 +13,14 @@
 #include "map.h"
 
 
-void rand_BFS(int iterator, int map[L][L], int to_check[500][2], int n);
+void rand_BFS(int iterator, int map[PIXELS_L][PIXELS_L], int to_check[500][2], int n);
 
-void save_rand_land(FILE *map_file_ptr, int map[L][L], int x, int y, int has_barrack, int barrack_r,
+void save_rand_land(FILE *map_file_ptr, int map[PIXELS_L][PIXELS_L], int x, int y, int has_barrack, int barrack_r,
                     int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer);
 
 void take_screenshot(SDL_Renderer* Renderer);
 
-void smooth_map(int map[L][L]);
+void smooth_map(int map[PIXELS_L][PIXELS_L]);
 
 int get_new_file_number(); 
 
@@ -42,8 +42,11 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     sprintf(file_name, "./data/maps/map%d.txt", new_file_number);
     FILE* map_file_ptr = fopen(file_name, "w");
     
+    if (map_file_ptr == NULL) fprintf(stderr, "Can't create %s\n", file_name);
+    
+    
     // add number of lands to file
-    fprintf(map_file_ptr, "%d\n", lands_n);
+    if (map_file_ptr != NULL) fprintf(map_file_ptr, "%d\n", lands_n);
     
     int share = lands_n/(players + 2);
     int lands_i = 0;
@@ -51,13 +54,13 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     
     for (int i = 1; i < players + 1; i++) { // i refers to side
         for (int j = 0; j < share; j++) {
-            int map[L][L] = {0};
-            int to_check[500][2] = {{L/2, L/2}};
+            int map[PIXELS_L][PIXELS_L] = {0};
+            int to_check[500][2] = {{PIXELS_L/2, PIXELS_L/2}};
 
             rand_BFS(0, map, to_check, 1);
             smooth_map(map);        
     
-            memcpy(lands[lands_i].pixels, map, L * L * sizeof(int));
+            memcpy(lands[lands_i].pixels, map, PIXELS_L * PIXELS_L * sizeof(int));
             
             lands[lands_i].has_barrack = 1;
             lands[lands_i].side = i;
@@ -77,9 +80,11 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             lands[lands_i].attack_queue = 0;
             
             // save land
-            save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x, lands[lands_i].barrack_y, lands[lands_i].has_barrack,
-                           lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers, lands[lands_i].max_soldiers,
-                           lands[lands_i].rebirth_rate, lands[lands_i].rebirth_timer);
+            if (map_file_ptr != NULL) save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x,
+                                                lands[lands_i].barrack_y, lands[lands_i].has_barrack,
+                                                lands[lands_i].barrack_r, lands[lands_i].side,
+                                                lands[lands_i].soldiers, lands[lands_i].max_soldiers,
+                                                lands[lands_i].rebirth_rate, lands[lands_i].rebirth_timer);
             lands_i++;
         }
     }
@@ -87,13 +92,13 @@ void create_rand_map(int lands_n, Land lands[], int players) {
     // lands with no side
     int impartials = lands_n - lands_i;
     for (int i = 0; i < impartials; i++) {
-        int map[L][L] = {0};
-        int to_check[500][2] = {{L/2, L/2}};       
+        int map[PIXELS_L][PIXELS_L] = {0};
+        int to_check[500][2] = {{PIXELS_L/2, PIXELS_L/2}};       
 
         rand_BFS(0, map, to_check, 1);
         smooth_map(map);
 
-        memcpy(lands[lands_i].pixels, map, L * L * sizeof(int));
+        memcpy(lands[lands_i].pixels, map, PIXELS_L * PIXELS_L * sizeof(int));
         
         lands[lands_i].has_barrack = 1;
         lands[lands_i].side = 0;
@@ -113,20 +118,24 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         lands[lands_i].attack_queue = 0;
 
         // save land
-        save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x, lands[lands_i].barrack_y, lands[lands_i].has_barrack,
-                       lands[lands_i].barrack_r, lands[lands_i].side, lands[lands_i].soldiers, lands[lands_i].max_soldiers,
-                       lands[lands_i].rebirth_rate, lands[lands_i].rebirth_timer);
-
+        if (map_file_ptr != NULL) save_rand_land(map_file_ptr, map, lands[lands_i].barrack_x,
+                                                 lands[lands_i].barrack_y, lands[lands_i].has_barrack,
+                                                 lands[lands_i].barrack_r, lands[lands_i].side,
+                                                 lands[lands_i].soldiers, lands[lands_i].max_soldiers,
+                                                 lands[lands_i].rebirth_rate, lands[lands_i].rebirth_timer);
         lands_i++;
     }
+    
+    // close file
+    fclose(map_file_ptr);
 }
 
-void rand_BFS(int iterator, int map[L][L], int to_check[500][2], int n) {
+void rand_BFS(int iterator, int map[PIXELS_L][PIXELS_L], int to_check[500][2], int n) {
     if (iterator == 50) return;
     int ss[500][2];
     int l = 0;
     for (int i = 0; i < n; i++) {
-        if (to_check[i][0] + 1  < L && map[to_check[i][0] + 1][to_check[i][1]] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
+        if (to_check[i][0] + 1  < PIXELS_L && map[to_check[i][0] + 1][to_check[i][1]] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
             map[to_check[i][0] + 1][to_check[i][1]] = 1;
             ss[l][0] = to_check[i][0] + 1;
             ss[l][1] = to_check[i][1];
@@ -138,7 +147,7 @@ void rand_BFS(int iterator, int map[L][L], int to_check[500][2], int n) {
             ss[l][1] = to_check[i][1];
             l++;
         }
-        if (to_check[i][1] + 1 < L && map[to_check[i][0]][to_check[i][1] + 1] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
+        if (to_check[i][1] + 1 < PIXELS_L && map[to_check[i][0]][to_check[i][1] + 1] == 0 && (rand()%2 || iterator < rand()%10 + 20)) {
             map[to_check[i][0]][to_check[i][1] + 1] = 1;
             ss[l][0] = to_check[i][0];
             ss[l][1] = to_check[i][1] + 1;
@@ -154,19 +163,19 @@ void rand_BFS(int iterator, int map[L][L], int to_check[500][2], int n) {
     rand_BFS(iterator + 1, map, ss, l);
 }
 
-void smooth_map(int map[L][L]) {
-    for (int i = 0; i < L; i++) {
-        for (int j = 0; j < L; j++) { 
+void smooth_map(int map[PIXELS_L][PIXELS_L]) {
+    for (int i = 0; i < PIXELS_L; i++) {
+        for (int j = 0; j < PIXELS_L; j++) { 
             if (map[i][j] == 0) {
                 int adjacents = 0;
                 if (j > 0 && map[i][j - 1] == 1) adjacents++;
                 if (i > 0 && map[i - 1][j] == 1) adjacents++;
-                if (j + 1 < 99 && map[i][j + 1] == 1) adjacents++;
-                if (i + 1 < 99 && map[i + 1][j] == 1) adjacents++;
+                if (j + 1 < PIXELS_L && map[i][j + 1] == 1) adjacents++;
+                if (i + 1 < PIXELS_L && map[i + 1][j] == 1) adjacents++;
                 if (i > 0 && j > 0 && map[i - 1][j - 1]) adjacents++;
-                if (i > 0 && j < 99 && map[i - 1][j + 1]) adjacents++;
-                if (i < 99 && j > 0 && map[i + 1][j - 1]) adjacents++;
-                if (i < 99 && j < 99 && map[i + 1][j + 1]) adjacents++;
+                if (i > 0 && j < PIXELS_L && map[i - 1][j + 1]) adjacents++;
+                if (i < PIXELS_L && j > 0 && map[i + 1][j - 1]) adjacents++;
+                if (i < PIXELS_L && j < PIXELS_L && map[i + 1][j + 1]) adjacents++;
                 if (adjacents > 4) map[i][j] = 1;
             }
         }
@@ -174,12 +183,12 @@ void smooth_map(int map[L][L]) {
 
 }
 
-void save_rand_land(FILE *map_file_ptr, int map[L][L], int x, int y, int has_barrack, int barrack_r,
+void save_rand_land(FILE *map_file_ptr, int map[PIXELS_L][PIXELS_L], int x, int y, int has_barrack, int barrack_r,
                     int side, int soldiers, int max_soldiers, int rebirth_rate, int rebirth_timer) {
     fprintf(map_file_ptr, "%d %d %d %d %d %d %d %d %d\n", x, y, has_barrack, barrack_r, side, soldiers,
                                                           max_soldiers, rebirth_rate, rebirth_timer);
-    for (int i = 0; i < L; i++) {
-        for (int j = 0; j < L; j++) {
+    for (int i = 0; i < PIXELS_L; i++) {
+        for (int j = 0; j < PIXELS_L; j++) {
             fprintf(map_file_ptr, "%d ", map[i][j]);
         }
         fprintf(map_file_ptr, "\n");
@@ -206,8 +215,8 @@ int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
         lands[i].is_attaking = 0;
         lands[i].attack_queue = 0;
 
-        for (int m = 0; m < L; m++) {
-            for (int n = 0; n < L; n++) {
+        for (int m = 0; m < PIXELS_L; m++) {
+            for (int n = 0; n < PIXELS_L; n++) {
                 fscanf(file_ptr, "%d", &lands[i].pixels[m][n]);
             }
         }
@@ -219,11 +228,11 @@ int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
 void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* selected_land_ptr) {
     for (int i = 0; i < lands_n; i++) {
         // draw land with 5x5 pixels
-        for (int m = 0; m < L; m++) {
-            for (int n = 0; n < L; n++) {
+        for (int m = 0; m < PIXELS_L; m++) {
+            for (int n = 0; n < PIXELS_L; n++) {
                 if (lands[i].pixels[m][n] == 1) {
-                    boxColor(Renderer, lands[i].barrack_x - (L/2 - m) * F, lands[i].barrack_y - (L/2 - n) * F,
-                    lands[i].barrack_x - (L/2 - m) * F + W, lands[i].barrack_y - (L/2 - n) * F + W, get_land_normal_color(lands[i].side));
+                    boxColor(Renderer, lands[i].barrack_x - (PIXELS_L/2 - m) * PIXELS_F, lands[i].barrack_y - (PIXELS_L/2 - n) * PIXELS_F,
+                    lands[i].barrack_x - (PIXELS_L/2 - m) * PIXELS_F + PIXELS_W, lands[i].barrack_y - (PIXELS_L/2 - n) * PIXELS_F + PIXELS_W, get_land_normal_color(lands[i].side));
                 }
             }
         }
@@ -266,10 +275,13 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
     draw_attack_line(Renderer, selected_land_ptr);
 }
 
+
+// -1 -> got error
 int get_new_file_number() {
     DIR *maps_dir;
     struct dirent *dir;
     maps_dir = opendir("./data/maps");
+    if (maps_dir == NULL) fprintf(stderr, "Can't open dir ./data/maps\n");
     
     int file_number = 0;
     if (maps_dir != NULL) {
@@ -316,10 +328,11 @@ void take_screenshot(SDL_Renderer* Renderer) {
     SDL_Surface* screenshot = SDL_CreateRGBSurface(0, DM.w, DM.h, 32, 0x00ff0000,
                               0x0000ff00, 0x000000ff, 0xff000000);
     SDL_RenderReadPixels(Renderer, NULL, SDL_PIXELFORMAT_ARGB8888, screenshot->pixels, screenshot->pitch);
-    SDL_SaveBMP(screenshot, file_name);
+    int r = SDL_SaveBMP(screenshot, file_name);
     SDL_FreeSurface(screenshot);
     
-    image_saved = 1;
+    if (r != 0) fprintf(stderr, "Can't save screenshot at %s\n", file_name);
+    else image_saved = 1;
 }
 
 void draw_attack_line(SDL_Renderer* Renderer, Land *selected_land_ptr) {
