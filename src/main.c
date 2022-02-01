@@ -9,6 +9,8 @@
 
 #include "map.h"
 #include "soldier.h"
+#include "potion.h"
+#include "ai.h"
 #include "events.h"
 
 const int FPS = 60;
@@ -30,15 +32,18 @@ int main() {
     // set seed
     srand(time(0));
     
-    int lands_n;
-    Land lands[20];
-    //create_rand_map(lands_n, lands, 3);
-    load_rand_map("./data/maps/map3.txt", &lands_n, lands);
+    int lands_n = 12;
+    Land lands[MAX_LANDS];
+    create_rand_map(lands_n, lands, 3);
+    //load_rand_map("./data/maps/map3.txt", &lands_n, lands);
     Land* selected_land = NULL;
 
-    Soldier *soldiers = malloc(250 * sizeof(Soldier));
+    Soldier *soldiers = malloc(MAX_SOLDIERS_STEP * sizeof(Soldier));
     int soldiers_n = 0;
-    int max_soldiers = 250;
+    int max_soldiers = MAX_SOLDIERS_STEP;
+
+    Potion potions[MAX_POTIONS];
+    int potions_n = 0;
     
     SDL_bool shallExit = SDL_FALSE;
     
@@ -50,11 +55,17 @@ int main() {
         apply_rand_map(Renderer, lands_n, lands, selected_land);
         
         apply_soldiers(Renderer, soldiers_n, soldiers);
+
+        add_potion(&potions_n, potions, lands_n, lands);
+        apply_potions(Renderer, potions_n, potions, lands_n, lands, soldiers_n, soldiers);
+        remove_expired_potions(&potions_n, potions);
         
-        collision_detection(soldiers_n, soldiers, lands_n, lands);
+        collision_detection(soldiers_n, soldiers, lands_n, lands, potions_n, potions);
         
         remove_zero_power_soldiers(&soldiers_n, soldiers);        
-
+        
+        check_bot_attack(lands_n, lands, &soldiers_n, &max_soldiers, &soldiers);
+        
         // listen for key events
         event_listener(&shallExit, lands_n, lands, &selected_land, &soldiers_n,
                        &max_soldiers, &soldiers);
