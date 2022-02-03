@@ -24,6 +24,8 @@ building instructions ... .
 - [x] save rebirth stuff in .txt file
 - [ ] save game
 - [x] take screen shot of new map
+- [ ] win checker 
+- [ ] lose checker    
 - [x] define const
 - [x] error handling
 ### soldier:
@@ -40,17 +42,22 @@ building instructions ... .
 ### events:
 - [x] event_listener()
 ### potions:
-- [ ] create and add potions
+- [x] create and add potions
 - [x] create stop_enemy potion
 - [x] create increase velocity potion
-- [ ] create no limit birth potions
-- [ ] create increse rebirth rate potion  
-- [ ] make specefic shape and color for potoins
-- [ ] add potions timer 
-- [ ] define consts
-- [ ] error handling
-### ai:
+- [x] create no limit birth potions
+- [x] create increse rebirth rate potion  
+- [x] make specefic shape and color for potoins
+- [x] add potions timer 
+- [x] define consts
+- [x] error handling
+- [ ] make text number better
+###ai:
 - [ ] make a good one
 ### design:
 - [ ] initial number of soldiers
-
+### ui:
+- [ ] start meue with input form and 3 buttons
+- [ ] continue last game
+- [ ] new game
+- [ ] scoreboard
