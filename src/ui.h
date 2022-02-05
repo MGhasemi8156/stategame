@@ -13,4 +13,6 @@
 
 SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Renderer);
 
+void draw_start_menu(SDL_Renderer* Renderer, char username[], const int SCREEN_WIDTH, const int SCREEN_HEIGHT);
+
 #endif

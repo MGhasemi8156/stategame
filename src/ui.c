@@ -22,7 +22,67 @@ SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Render
     }
     
     SDL_FreeSurface(background_image);
-    background_image = NULL;
     return background_texture;
 }
 
+void draw_start_menu(SDL_Renderer* Renderer, char username[], const int SCREEN_WIDTH, const int SCREEN_HIEGHT) {
+    // add fonts
+    TTF_Font* font = TTF_OpenFont("/home/mohsen/Projects/state.io/assets/fonts/arial.ttf", 24);
+    
+    if (font == NULL) {
+        fprintf(stderr, "Can't open afds\n");
+        //return;
+    }    
+
+    SDL_Color text_color = {0, 0, 0};
+    
+    // input form
+    boxColor(Renderer, 40, 275, 340, 355, 0xcceb6e34);
+    boxColor(Renderer, 43, 278, 337, 352, 0xffffffff);
+    
+    // buttons
+    Sint16 button1_vx[4] = {340, 40, 70, 370};
+    Sint16 button1_vy[4] = {400, 400, 480, 480};
+    Sint16 button2_vx[4] = {375, 75, 105, 405};
+    Sint16 button2_vy[4] = {495, 495, 575, 575};
+    Sint16 button3_vx[4] = {410, 110, 140, 440};
+    Sint16 button3_vy[4] = {590, 590, 670, 670};
+    
+    // get mouse pos
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+
+    if (mouse_x <= button1_vx[3] && mouse_x >= button1_vx[1] && mouse_y >= button1_vy[0] && mouse_y <= button1_vy[2]) {
+        for (int i = 0; i < 4; i++) button1_vx[i] += 30;
+        filledPolygonColor(Renderer, button1_vx, button1_vy, 4, 0xffff9100);
+    }
+    else filledPolygonColor(Renderer, button1_vx, button1_vy, 4, 0xffffad42);
+    
+    if (mouse_x <= button2_vx[3] && mouse_x >= button2_vx[1] && mouse_y >= button2_vy[0] && mouse_y <= button2_vy[2]) {
+        for (int i = 0; i < 4; i++) button2_vx[i] += 30;
+        filledPolygonColor(Renderer, button2_vx, button2_vy, 4, 0xffff9100);
+    }
+    else filledPolygonColor(Renderer, button2_vx, button2_vy, 4, 0xffffad42);
+
+    if (mouse_x <= button3_vx[3] && mouse_x >= button3_vx[1] && mouse_y >= button3_vy[0] && mouse_y <= button3_vy[2]) {
+        for (int i = 0; i < 4; i++) button3_vx[i] += 30;
+        filledPolygonColor(Renderer, button3_vx, button3_vy, 4, 0xffff9100);
+    }
+    else filledPolygonColor(Renderer, button3_vx, button3_vy, 4, 0xffffad42);
+
+    SDL_Rect input_form_rect = {.x = 35, .y = 310, .w = 400, .h = 100};
+
+    // input form text
+    //SDL_Surface* input_form_text_surface = TTF_RenderText_Solid(font, username, text_color);
+    //SDL_Texture* input_form_text_texture = SDL_CreateTextureFromSurface(Renderer, input_form_text_surface);
+    //SDL_Rect input_form_text_rect = {.x = 35, .y = 310};
+    //SDL_QueryTexture(input_form_text_texture, NULL, NULL, &input_form_text_rect.w, &input_form_text_rect.h);
+    
+    // render stuff
+    //SDL_RenderCopy(Renderer, input_form_text_texture, NULL, &input_form_text_rect);
+    
+    // free stuff
+    //SDL_FreeSurface(input_form_text_surface);
+    //SDL_DestroyTexture(input_form_text_texture);
+    
+}
