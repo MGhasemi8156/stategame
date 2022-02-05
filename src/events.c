@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
+#include <string.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
@@ -9,6 +10,8 @@
 #include "map.h"
 #include "soldier.h"
 #include "events.h"
+
+int check_username(char username[]);
 
 void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20],
                     Land** selected_land_ptr, int* soldiers_n, int* max_soldiers,
@@ -59,3 +62,62 @@ void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20],
     }
     return;
 }
+
+void start_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char username[], char alert[]) {
+    SDL_Event Event;
+    while(SDL_PollEvent(&Event)) {
+        switch (Event.type) {
+            case SDL_QUIT:
+                *shall_exit_ptr = SDL_TRUE;
+                break;
+            case SDL_TEXTINPUT:
+                if (strlen(username) + 1 < 20) // change to const
+                    strcat(username, Event.text.text);
+                break;
+            case SDL_KEYDOWN:
+                if (Event.key.keysym.sym == SDLK_BACKSPACE)
+                if (strlen(username) > 0) username[strlen(username) - 1] = '\0';
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (Event.button.x >= 100 && Event.button.x <= 370 && Event.button.y >= 400 && Event.button.y <= 480) {
+                    if (check_username(username) == -1)
+                        sprintf(alert, "Username can not include spaces");
+                    else if (check_username(username) == -2)
+                        sprintf(alert, "You must enter username");
+                    else {
+                        *window_number_ptr = 1; // go to select map
+                        sprintf(alert, "");
+                    }
+                }
+                if (Event.button.x >= 135 && Event.button.x <= 405 && Event.button.y >= 495 && Event.button.y <= 575) {
+                    if (check_username(username) == -1)
+                        sprintf(alert, "Username can not include spaces");
+                    else if (check_username(username) == -2)
+                        sprintf(alert, "You must enter username");
+                    else {
+                        *window_number_ptr = 0; // TODO continue save game
+                        sprintf(alert, "");
+                    }
+                }
+                if (Event.button.x >= 175 && Event.button.x <= 440 && Event.button.y >= 590 && Event.button.y <= 670) {
+                    if (check_username(username) == -1)
+                        sprintf(alert, "Username can not include spaces");
+                    else if (check_username(username) == -2)
+                        sprintf(alert, "You must enter username");
+                    else {
+                        *window_number_ptr = 2; // go to score board
+                        sprintf(alert, "");
+                    }
+                }
+        }
+    }
+}
+
+// 0 -> valid -1 -> invalid
+int check_username(char username[]) {
+    for (int i = 0; i < strlen(username); i++)
+        if (username[i] == ' ') return -1;
+    if (strlen(username) == 0) return -2;
+    return 0;
+}
+
