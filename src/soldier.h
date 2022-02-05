@@ -12,8 +12,6 @@
 #include "map.h"
 #include "potion.h"
 
-#define MAX_SOLDIERS_STEP 250
-
 #define SOLDIER_R 5
 #define INITIAL_VELOCITY_FACOTR 3
 #define TILL_BIRTH_FACTOR 7
