@@ -25,12 +25,12 @@ SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Render
     return background_texture;
 }
 
-void draw_start_menu(SDL_Renderer* Renderer, char username[], const int SCREEN_WIDTH, const int SCREEN_HIEGHT) {
+void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]) {
     // add fonts
     TTF_Font* font = TTF_OpenFont("/home/mohsen/Projects/state.io/assets/fonts/arial.ttf", 24);
     
     if (font == NULL) {
-        fprintf(stderr, "Can't open afds\n");
+       // fprintf(stderr, "Can't open afds\n");
         //return;
     }    
 
@@ -39,7 +39,10 @@ void draw_start_menu(SDL_Renderer* Renderer, char username[], const int SCREEN_W
     // input form
     boxColor(Renderer, 40, 275, 340, 355, 0xcceb6e34);
     boxColor(Renderer, 43, 278, 337, 352, 0xffffffff);
-    
+
+    stringColor(Renderer, 45, 300, username, 0xff000000);
+
+    stringColor(Renderer, 45, 370, alert, 0xff000000);
     // buttons
     Sint16 button1_vx[4] = {340, 40, 70, 370};
     Sint16 button1_vy[4] = {400, 400, 480, 480};
@@ -48,7 +51,6 @@ void draw_start_menu(SDL_Renderer* Renderer, char username[], const int SCREEN_W
     Sint16 button3_vx[4] = {410, 110, 140, 440};
     Sint16 button3_vy[4] = {590, 590, 670, 670};
     
-    // get mouse pos
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
 
