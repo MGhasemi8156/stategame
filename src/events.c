@@ -113,7 +113,7 @@ void start_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr,
     }
 }
 
-void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr) {
+void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr, int* game_mode_ptr) {
     SDL_Event Event;
     while(SDL_PollEvent(&Event)) {
         switch (Event.type) {
@@ -127,6 +127,16 @@ void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number
                 if (Event.button.x >= 880 && Event.button.x <= 930 && Event.button.y >= 160 &&
                     Event.button.y <= 240 && *current_map_number_ptr < maps_n) 
                     *current_map_number_ptr +=1;
+                if (Event.button.x >= 390 && Event.button.x <= 690 && Event.button.y >= 400 &&
+                    Event.button.y <= 500 && maps_n > 0) {
+                    *game_mode_ptr = 0;
+                    *window_number_ptr = 3;
+                }
+                if (Event.button.x >= 390 && Event.button.x <= 690 && Event.button.y >= 500 &&
+                    Event.button.y <= 580) {
+                    *game_mode_ptr = 1;
+                    *window_number_ptr = 3;
+                }
                 break;
         }
     }

@@ -300,6 +300,8 @@ int get_new_file_number() {
         file_number--; // for . and ..
     }
     
+    free(maps_dir);
+
     return file_number;
 }
 

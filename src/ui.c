@@ -113,6 +113,8 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
         stringColor(Renderer, 540, 450, " start game", 0xff000000);
 
         
+        
+        
         SDL_RenderCopy(Renderer, map_texture, NULL, &map_rect);
         
 
@@ -121,5 +123,8 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
         SDL_FreeSurface(map_surface);
         SDL_DestroyTexture(map_texture);
     }
+
+    boxColor(Renderer, 390, 500, 690, 580, 0xff00ffff);
+    stringColor(Renderer, 540, 540, "start a rand map", 0xff000000);
 }
 
