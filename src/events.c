@@ -113,6 +113,26 @@ void start_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr,
     }
 }
 
+void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr) {
+    SDL_Event Event;
+    while(SDL_PollEvent(&Event)) {
+        switch (Event.type) {
+            case SDL_QUIT:
+                *shall_exit_ptr = SDL_TRUE;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (Event.button.x >= 150 && Event.button.x <= 200 && Event.button.y >= 160 &&
+                    Event.button.y <= 240 && *current_map_number_ptr > 1) 
+                    *current_map_number_ptr -=1;
+                if (Event.button.x >= 880 && Event.button.x <= 930 && Event.button.y >= 160 &&
+                    Event.button.y <= 240 && *current_map_number_ptr < maps_n) 
+                    *current_map_number_ptr +=1;
+                break;
+        }
+    }
+
+}
+
 // 0 -> valid -1 -> invalid
 int check_username(char username[]) {
     for (int i = 0; i < strlen(username); i++)

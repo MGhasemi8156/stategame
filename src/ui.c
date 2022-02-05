@@ -88,3 +88,38 @@ void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]) {
     //SDL_DestroyTexture(input_form_text_texture);
     
 }
+
+
+void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_number, char alert[]) {
+    if (maps_n > 0) {
+        char image_path[100];
+        sprintf(image_path, "./data/screenshots/map%d.bmp", current_map_number);
+        
+        SDL_Surface* map_surface = SDL_LoadBMP(image_path);
+        if (map_surface == NULL) {
+            fprintf(stderr, "%s\n", SDL_GetError());
+            return;
+        }
+        SDL_Texture* map_texture = SDL_CreateTextureFromSurface(Renderer, map_surface);
+        
+        SDL_Rect map_rect = {.x = 220, .y = 50, .w = 640, .h = 300};
+        
+        if (current_map_number > 1)
+            filledTrigonColor(Renderer, 200, 160, 200, 240, 150, 200, 0xff000000);
+        if (current_map_number < maps_n)
+            filledTrigonColor(Renderer, 880, 160, 880, 240, 930, 200, 0xff000000);
+   
+        boxColor(Renderer, 390, 400, 690, 500, 0xffffffff);
+        stringColor(Renderer, 540, 450, " start game", 0xff000000);
+
+        
+        SDL_RenderCopy(Renderer, map_texture, NULL, &map_rect);
+        
+
+
+        // free map screenshot stuff
+        SDL_FreeSurface(map_surface);
+        SDL_DestroyTexture(map_texture);
+    }
+}
+
