@@ -101,6 +101,7 @@ void collision_detection(int soldiers_n, Soldier *soldiers, int lands_n, Land la
                          int potions_n, Potion potions[]) {
     for (int i = 0; i < soldiers_n; i++) {
         // soldiers collisions
+        if (soldiers[i].born)
         for (int j = i + 1; j < soldiers_n; j++) {
             if (soldiers[i].side != soldiers[j].side && soldiers[i].power > 0 && soldiers[j].power > 0 && // dead soldiers can't collide 
                 soldiers[i].born && soldiers[j].born) { // born soldiers can collide
