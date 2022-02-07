@@ -71,7 +71,7 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             lands[lands_i].barrack_y = y;
             lands[lands_i].barrack_r = BARRACK_R;
             
-            lands[lands_i].soldiers = 12; // TODO change later
+            lands[lands_i].soldiers = 25 + (rand()%2 ? -1: 1) * rand()%4;
             lands[lands_i].max_soldiers = MAX_SOLDIERS;
             lands[lands_i].rebirth_rate = REBIRTH_RATE;
             lands[lands_i].rebirth_timer = REBIRTH_RATE;
@@ -112,7 +112,7 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         lands[lands_i].barrack_y = y;
         lands[lands_i].barrack_r = BARRACK_R;
         
-        lands[lands_i].soldiers = 12;
+        lands[lands_i].soldiers = 20;
         lands[lands_i].max_soldiers = IMPARTIAL_MAX_SOLDIERS;
         lands[lands_i].rebirth_rate = IMPARTIAL_REBIRTH_RATE;
         lands[lands_i].rebirth_timer = IMPARTIAL_REBIRTH_RATE;
@@ -277,31 +277,31 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
     }
 
     // draw HUD
-    boxColor(Renderer, 0, 85, 150, 500, 0xaaf08e59);
+    boxColor(Renderer, 0, 85, 175, 500, 0xaaf08e59);
     Sint16 vx[6], vy[6];
     for (int i = 0; i < 6; i++) {
-        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vx[i] = 87 + 35 * cos(2 * PI / 6 * i);
         vy[i] = 150 + 35 * sin(2 * PI / 6 * i);
     }
     stringRGBA(Renderer, 25, 100, "STOP.ENEMIES", 0, 0, 0, 255);
     filledPolygonColor(Renderer, vx, vy, 6, 0xffddff00);
     for (int i = 0; i < 6; i++) {
-        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vx[i] = 87 + 35 * cos(2 * PI / 6 * i);
         vy[i] = 250 + 35 * sin(2 * PI / 6 * i);
     }
     stringColor(Renderer, 10, 200, "INCREASE.VELOCITY", 0xff000000);
     filledPolygonColor(Renderer, vx, vy, 6, 0xff00ffa2);
     for (int i = 0; i < 6; i++) {
-        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vx[i] = 87 + 35 * cos(2 * PI / 6 * i);
         vy[i] = 350 + 35 * sin(2 * PI / 6 * i);
     }
     stringColor(Renderer, 10, 300, "UNLIMITED.REBIRTH", 0xff000000);
     filledPolygonColor(Renderer, vx, vy, 6, 0xffff00d4);
     for (int i = 0; i < 6; i++) {
-        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vx[i] = 87 + 35 * cos(2 * PI / 6 * i);
         vy[i] = 450 + 35 * sin(2 * PI / 6 * i);
     }
-    stringColor(Renderer, 10, 400, "INCREASE.REBIRTH RATE", 0xff000000);
+    stringColor(Renderer, 2, 400, "INCREASE.REBIRTH.RATE", 0xff000000);
     filledPolygonColor(Renderer, vx, vy, 6, 0xff00ccfd);
     
     
@@ -336,17 +336,17 @@ int get_new_file_number() {
 }
 
 void get_land_coordinates(int* x, int* y) {
-    static int coordinates[20][10] = {{200, 200}, {200, 400}, {200, 600}, {200, 800}, 
-                                      {550, 200}, {450, 400}, {550, 600}, {550, 800},
-                                      {900, 200}, {900, 400}, {900, 600}, {900, 800},
-                                      {1250, 200}, {1250, 400}, {1250, 600}, {1250, 800},
-                                      {1600, 200}, {1600, 400}, {1600, 600}, {1600, 800}};
+    static int coordinates[20][10] = {{300, 200}, {300, 400}, {200, 600}, {300, 800}, 
+                                      {550, 200}, {550, 400}, {650, 600}, {550, 800},
+                                      {900, 200}, {850, 400}, {900, 600}, {950, 800},
+                                      {1250, 200}, {1200, 400}, {1250, 600}, {1220, 800},
+                                      {1600, 200}, {1450, 400}, {1600, 600}, {1550, 800}};
     static int remain = 20;
     
     int target = rand()%remain;
     
-    *x = coordinates[target][0] + (rand()%2 ? 1: -1) * rand()%100;
-    *y = coordinates[target][1] + (rand()%2 ? 1: -1) * rand()%100;
+    *x = coordinates[target][0] + (rand()%2 ? 1: -1) * (rand()%30 + 20);
+    *y = coordinates[target][1] + (rand()%2 ? 1: -1) * (rand()%30 + 20);
 
     // shift
     for (int i = target; i < 19; i++) {

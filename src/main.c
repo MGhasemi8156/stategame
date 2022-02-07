@@ -7,7 +7,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "map.h"
 #include "soldier.h"
@@ -19,6 +19,9 @@
 #define MAX_USERNAME_LENGTH 20
 
 #define FPS 60
+
+const int SCREEN_WIDTH = 1080;
+const int SCREEN_HEIGHT = 720;
 
 int get_maps_n();
 
@@ -47,22 +50,23 @@ int main() {
         fprintf(stderr, "%s\n", TTF_GetError());
         return 0;   
     }
-    TTF_Init();
         
     // set rand seed
     srand(time(0));
 
     // set maps_n
     maps_n = get_maps_n();
-
+    
+    SDL_Window *game_menu = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                                      SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);   
+    SDL_Renderer *Renderer = SDL_CreateRenderer(game_menu, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+    
     while (shall_exit == SDL_FALSE) {
         if (window_number == 0 || window_number == 1 || window_number == 2) {
-            const int SCREEN_WIDTH = 1080;
-            const int SCREEN_HEIGHT = 720;
+                        TTF_Font* font = TTF_OpenFont("./assets/fonts/liber.ttf", 12);
+            if (font == NULL) printf("=%s=\n", TTF_GetError());
 
-            SDL_Window *game_menu = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                                      SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);   
-            SDL_Renderer *Renderer = SDL_CreateRenderer(game_menu, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+            
             
             // background image
             SDL_Texture* background_texture = create_background_texture("./assets/background.bmp", Renderer);
@@ -83,9 +87,9 @@ int main() {
                     start_menu_event_listener(&shall_exit, &window_number, username, alert);
                 }    
                 if (window_number == 1) {
-                    draw_select_map_menu(Renderer, maps_n, current_map_number, alert);
+                    draw_select_map_menu(Renderer, maps_n, current_map_number, alert, global_players_n, global_lands_n);
                     
-                    select_map_menu_event_listener(&shall_exit, &window_number, alert, maps_n, &current_map_number, &game_mode);
+                    select_map_menu_event_listener(&shall_exit, &window_number, alert, maps_n, &current_map_number, &game_mode, &global_lands_n, &global_players_n);
                 }
                 if (window_number == 2) {
                 }
@@ -98,18 +102,10 @@ int main() {
 
             // free background texture
             SDL_DestroyTexture(background_texture);
-            
-            SDL_DestroyRenderer(Renderer);
-            SDL_DestroyWindow(game_menu);
         }
         if (window_number == 3) {
-            const int SCREEN_WIDTH = 640;
-            const int SCREEN_HEIGHT = 480;
+            SDL_SetWindowFullscreen(game_menu, SDL_WINDOW_FULLSCREEN_DESKTOP);
             
-            SDL_Window *Game_Window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);
-            SDL_Renderer *Renderer = SDL_CreateRenderer(Game_Window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-
             int lands_n;
             Land lands[MAX_LANDS];
 
@@ -165,11 +161,11 @@ int main() {
             }
             // free allocated memory
             free(soldiers);
-            SDL_DestroyRenderer(Renderer);
-            SDL_DestroyWindow(Game_Window);
         }
     }
-
+    SDL_DestroyRenderer(Renderer);
+    SDL_DestroyWindow(game_menu);
+    
     return 0;
 }
 
