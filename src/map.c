@@ -12,6 +12,7 @@
 
 #include "map.h"
 
+#define PI 3.141592
 
 void rand_BFS(int iterator, int map[PIXELS_L][PIXELS_L], int to_check[500][2], int n);
 
@@ -274,6 +275,35 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
             if (lands[i].attack_queue <= 0) lands[i].is_attaking = 0;
         }
     }
+
+    // draw HUD
+    boxColor(Renderer, 0, 85, 150, 500, 0xaaf08e59);
+    Sint16 vx[6], vy[6];
+    for (int i = 0; i < 6; i++) {
+        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vy[i] = 150 + 35 * sin(2 * PI / 6 * i);
+    }
+    stringRGBA(Renderer, 25, 100, "STOP.ENEMIES", 0, 0, 0, 255);
+    filledPolygonColor(Renderer, vx, vy, 6, 0xffddff00);
+    for (int i = 0; i < 6; i++) {
+        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vy[i] = 250 + 35 * sin(2 * PI / 6 * i);
+    }
+    stringColor(Renderer, 10, 200, "INCREASE.VELOCITY", 0xff000000);
+    filledPolygonColor(Renderer, vx, vy, 6, 0xff00ffa2);
+    for (int i = 0; i < 6; i++) {
+        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vy[i] = 350 + 35 * sin(2 * PI / 6 * i);
+    }
+    stringColor(Renderer, 10, 300, "UNLIMITED.REBIRTH", 0xff000000);
+    filledPolygonColor(Renderer, vx, vy, 6, 0xffff00d4);
+    for (int i = 0; i < 6; i++) {
+        vx[i] = 75 + 35 * cos(2 * PI / 6 * i);
+        vy[i] = 450 + 35 * sin(2 * PI / 6 * i);
+    }
+    stringColor(Renderer, 10, 400, "INCREASE.REBIRTH RATE", 0xff000000);
+    filledPolygonColor(Renderer, vx, vy, 6, 0xff00ccfd);
+    
     
     // take screenshot of map
     if (new_file_number != -1 && !image_saved) {
