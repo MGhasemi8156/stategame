@@ -113,7 +113,7 @@ void start_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr,
     }
 }
 
-void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr, int* game_mode_ptr) {
+void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr, int* game_mode_ptr, int* global_lands_n, int* global_players_n) {
     SDL_Event Event;
     while(SDL_PollEvent(&Event)) {
         switch (Event.type) {
@@ -127,13 +127,30 @@ void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number
                 if (Event.button.x >= 880 && Event.button.x <= 930 && Event.button.y >= 160 &&
                     Event.button.y <= 240 && *current_map_number_ptr < maps_n) 
                     *current_map_number_ptr +=1;
-                if (Event.button.x >= 390 && Event.button.x <= 690 && Event.button.y >= 400 &&
-                    Event.button.y <= 500 && maps_n > 0) {
+                if (Event.button.x >= 220 && Event.button.x <= 860 && Event.button.y >= 50 &&
+                    Event.button.y <= 350 && maps_n > 0) {
                     *game_mode_ptr = 0;
                     *window_number_ptr = 3;
                 }
-                if (Event.button.x >= 390 && Event.button.x <= 690 && Event.button.y >= 500 &&
-                    Event.button.y <= 580) {
+                if (Event.button.x >= 280 && Event.button.x <= 300 && Event.button.y >= 475 &&
+                    Event.button.y <= 495 && *global_lands_n < 20) {
+                    *global_lands_n += 1;
+                }
+                if (Event.button.x >= 280 && Event.button.x <= 300 && Event.button.y >= 505 &&
+                    Event.button.y <= 525 && *global_lands_n > 10) {
+                    *global_lands_n -= 1;
+                }
+                if (Event.button.x >= 480 && Event.button.x <= 500 && Event.button.y >= 475 &&
+                    Event.button.y <= 495 && *global_players_n < 6) {
+                    *global_players_n += 1;
+                }
+                if (Event.button.x >= 480 && Event.button.x <= 500 && Event.button.y >= 505 &&
+                    Event.button.y <= 525 && *global_players_n > 2) {
+                    *global_players_n -= 1;
+                }
+
+                if (Event.button.x >= 600 && Event.button.x <= 850 && Event.button.y >= 470 &&
+                    Event.button.y <= 530) {
                     *game_mode_ptr = 1;
                     *window_number_ptr = 3;
                 }

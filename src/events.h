@@ -17,6 +17,6 @@ void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20],
 
 void start_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char username[], char alert[]);
 
-void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr, int* game_mode_ptr);
+void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[], int maps_n, int* current_map_number_ptr, int* game_mode_ptr, int* global_lands_n, int* global_players_n);
 
 #endif

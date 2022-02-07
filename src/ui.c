@@ -26,13 +26,6 @@ SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Render
 }
 
 void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]) {
-    // add fonts
-    TTF_Font* font = TTF_OpenFont("/home/mohsen/Projects/state.io/assets/fonts/arial.ttf", 24);
-    
-    if (font == NULL) {
-       // fprintf(stderr, "Can't open afds\n");
-        //return;
-    }    
 
     SDL_Color text_color = {0, 0, 0};
     
@@ -90,7 +83,9 @@ void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]) {
 }
 
 
-void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_number, char alert[]) {
+void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_number, char alert[], int global_players_n, int global_lands_n) {
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
     if (maps_n > 0) {
         char image_path[100];
         sprintf(image_path, "./data/screenshots/map%d.bmp", current_map_number);
@@ -108,23 +103,41 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
             filledTrigonColor(Renderer, 200, 160, 200, 240, 150, 200, 0xff000000);
         if (current_map_number < maps_n)
             filledTrigonColor(Renderer, 880, 160, 880, 240, 930, 200, 0xff000000);
-   
-        boxColor(Renderer, 390, 400, 690, 500, 0xffffffff);
-        stringColor(Renderer, 540, 450, " start game", 0xff000000);
-
         
-        
-        
+        if (mouse_x >= 220 && mouse_x <= 860 && mouse_y >= 50 && mouse_y <= 350)
+            boxColor(Renderer, 215, 45, 865, 355, 0xffff9100);
+            
         SDL_RenderCopy(Renderer, map_texture, NULL, &map_rect);
         
-
-
         // free map screenshot stuff
         SDL_FreeSurface(map_surface);
         SDL_DestroyTexture(map_texture);
     }
-
-    boxColor(Renderer, 390, 500, 690, 580, 0xff00ffff);
-    stringColor(Renderer, 540, 540, "start a rand map", 0xff000000);
+    
+    stringColor(Renderer, 150, 500, "LANDS:", 0xff000000);
+    boxColor(Renderer, 210, 470, 270, 530, 0xffffffff);
+    char lands_number[5];
+    sprintf(lands_number, "%d", global_lands_n);
+    stringColor(Renderer, 232, 497, lands_number, 0xff000000);
+    if (global_lands_n < 20)
+        filledTrigonColor(Renderer, 280, 495, 300, 495, 290, 475, 0xff000000);
+    if (global_lands_n > 10)
+        filledTrigonColor(Renderer, 280, 505, 300, 505, 290, 525, 0xff000000);
+    
+    stringColor(Renderer, 340, 500, "PLAYERS:", 0xff000000);
+    boxColor(Renderer, 410, 470, 470, 530, 0xffffffff);
+    char players_number[5];
+    sprintf(players_number, "%d", global_players_n);
+    stringColor(Renderer, 432, 497, players_number, 0xff000000);
+    if (global_players_n < 6)
+        filledTrigonColor(Renderer, 480, 495, 500, 495, 490, 475, 0xff000000);
+    if (global_players_n > 2)
+        filledTrigonColor(Renderer, 480, 505, 500, 505, 490, 525, 0xff000000);
+    
+    if (mouse_x >= 600 && mouse_x <= 850 && mouse_y >= 470 && mouse_y <= 530)
+        boxColor(Renderer, 600, 470, 850, 530, 0xffff9100);
+    else boxColor(Renderer, 600, 470, 850, 530, 0xffffad42);
+    
+    stringColor(Renderer, 650, 497, "CREATE A RAND MAP", 0xff000000);
 }
 
