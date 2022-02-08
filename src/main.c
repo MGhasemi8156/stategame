@@ -4,6 +4,7 @@
 #include <math.h>
 #include <time.h>
 #include <dirent.h>
+#include <string.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
@@ -24,6 +25,12 @@ const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
 
 int get_maps_n();
+int get_users_number(char usernames[50][20], int scores[50]);
+void add_new_user(char username[], int* users_n, char usernames[50][20], int scores[50]);
+void save_users(int users_n, char usernames[50][20], int scores[50]);
+void check_win(int lands_n, Land lands[], int soldiers_n, Soldier *soldiers, char username[], int users_n, char usernames[50][20], int scores[50], int* window_number, char alert[]);
+void check_lose(int lands_n, Land lands[], int soldiers_n, Soldier *soldiers, char username[], int users_n, char usernames[50][20], int scores[50], int* window_number, char alert[]);
+void sort_users(int users_n, char usernames[50][20], int scores[50]);
 
 int window_number = 0; // 0 -> start menu, 2 -> score board, 1 -> select map, 3 -> game window
 
@@ -54,20 +61,23 @@ int main() {
     // set rand seed
     srand(time(0));
 
+    // users stuff
+    char usernames[50][20];
+    int scores[50];
+    int users_n = get_users_number(usernames, scores);
+    
     // set maps_n
     maps_n = get_maps_n();
     
-    SDL_Window *game_menu = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    SDL_Window *game_window = SDL_CreateWindow("state.io", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                                       SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);   
-    SDL_Renderer *Renderer = SDL_CreateRenderer(game_menu, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+    SDL_Renderer *Renderer = SDL_CreateRenderer(game_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     
     while (shall_exit == SDL_FALSE) {
         if (window_number == 0 || window_number == 1 || window_number == 2) {
                         TTF_Font* font = TTF_OpenFont("./assets/fonts/liber.ttf", 12);
             if (font == NULL) printf("=%s=\n", TTF_GetError());
 
-            
-            
             // background image
             SDL_Texture* background_texture = create_background_texture("./assets/background.bmp", Renderer);
             SDL_Rect background_rect = {.x = 0, .y = 0, .w = SCREEN_WIDTH, .h = SCREEN_HEIGHT};
@@ -87,11 +97,26 @@ int main() {
                     start_menu_event_listener(&shall_exit, &window_number, username, alert);
                 }    
                 if (window_number == 1) {
+                    add_new_user(username, &users_n, usernames, scores);                
+
                     draw_select_map_menu(Renderer, maps_n, current_map_number, alert, global_players_n, global_lands_n);
                     
                     select_map_menu_event_listener(&shall_exit, &window_number, alert, maps_n, &current_map_number, &game_mode, &global_lands_n, &global_players_n);
+                    
+                    save_users(users_n, usernames, scores);
                 }
                 if (window_number == 2) {
+                    SDL_SetWindowFullscreen(game_window, 0);
+
+                    add_new_user(username, &users_n, usernames, scores); 
+                    
+                    sort_users(users_n, usernames, scores);
+                    
+                    draw_scoreboard(Renderer, users_n, usernames, scores, alert);
+                
+                    scoreboard_event_listener(&shall_exit, &window_number, alert);
+
+                    save_users(users_n, usernames, scores);
                 }
                 
                 // update window
@@ -104,7 +129,7 @@ int main() {
             SDL_DestroyTexture(background_texture);
         }
         if (window_number == 3) {
-            SDL_SetWindowFullscreen(game_menu, SDL_WINDOW_FULLSCREEN_DESKTOP);
+            SDL_SetWindowFullscreen(game_window, SDL_WINDOW_FULLSCREEN_DESKTOP);
             
             int lands_n;
             Land lands[MAX_LANDS];
@@ -128,9 +153,9 @@ int main() {
             Potion potions[MAX_POTIONS];
             int potions_n = 0;   
     
-   
+            add_new_user(username, &users_n, usernames, scores); 
     
-            while (shall_exit == SDL_FALSE) {
+            while (shall_exit == SDL_FALSE && window_number == 3) {
                 // renderer color and clear
                 SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
                 SDL_RenderClear(Renderer);
@@ -153,6 +178,9 @@ int main() {
                 // listen for key events
                 event_listener(&shall_exit, lands_n, lands, &selected_land, &soldiers_n,
                                &max_soldiers, &soldiers);
+                
+                check_win(lands_n, lands, soldiers_n, soldiers, username, users_n, usernames, scores, &window_number, alert);
+                check_lose(lands_n, lands, soldiers_n, soldiers, username, users_n, usernames, scores, &window_number, alert);
 
                 // update window
                 SDL_RenderPresent(Renderer);
@@ -162,9 +190,11 @@ int main() {
             // free allocated memory
             free(soldiers);
         }
+
+        save_users(users_n, usernames, scores);
     }
     SDL_DestroyRenderer(Renderer);
-    SDL_DestroyWindow(game_menu);
+    SDL_DestroyWindow(game_window);
     
     return 0;
 }
@@ -187,3 +217,91 @@ int get_maps_n() {
     return maps_n;
 }
 
+int get_users_number(char usernames[50][20], int scores[50]) {
+    FILE* users_file_ptr = fopen("./data/users.txt", "r");
+    int i = 0;
+    while(fscanf(users_file_ptr, "%s", usernames[i]) != EOF) {
+        fscanf(users_file_ptr, "%d", &scores[i]);
+        i++;
+    }
+    fclose(users_file_ptr);
+    return i;
+}
+
+void save_users(int users_n, char usernames[50][20], int scores[50]) {
+    FILE* users_file_ptr = fopen("./data/users.txt", "w");
+    for (int i = 0; i < users_n; i++) {
+        fprintf(users_file_ptr, "%s %d\n", usernames[i], scores[i]);
+    }
+
+    fclose(users_file_ptr);
+}
+
+void add_new_user(char username[], int* users_n, char usernames[50][20], int scores[50]) {
+    for (int i = 0; i < *users_n; i++) {
+        if (strcmp(username, usernames[i]) == 0)
+            return;
+    }   
+    strcpy(usernames[*users_n], username);
+    scores[*users_n] = 100;
+    *users_n += 1;
+}
+
+void check_win(int lands_n, Land lands[], int soldiers_n, Soldier *soldiers, char username[], int users_n, char usernames[50][20], int scores[50], int* window_number, char alert[]) {
+    for (int i = 0; i < lands_n; i++) {
+        if (lands[i].side != 1 && lands[i].side != 0) return;
+    }
+    for (int i = 0; i < soldiers_n; i++) {
+        if (soldiers[i].side != 1) return;
+    }
+    
+    for (int i = 0; i < users_n; i++) {
+        if (strcmp(username, usernames[i]) == 0) {
+            scores[i] += 30;
+            strcat(alert, "You win and you gain 30 points.");
+            break;
+        }
+    }
+
+    *window_number = 2;
+
+}
+
+void check_lose(int lands_n, Land lands[], int soldiers_n, Soldier *soldiers, char username[], int users_n, char usernames[50][20], int scores[50], int* window_number, char alert[]) {
+    for (int i = 0; i < lands_n; i++) {
+        if (lands[i].side == 1) return;
+    }
+    for (int i = 0; i < soldiers_n; i++) {
+        if (soldiers[i].side == 1) return;
+    }
+    
+    for (int i = 0; i < users_n; i++) {
+        if (strcmp(username, usernames[i]) == 0) {
+            scores[i] -= 20;
+            if (scores[i] < 0) scores[i] = 0;
+            strcat(alert, "You lose and you lose 20 points.");
+            break;
+        }
+    }
+
+    *window_number = 2;
+
+}
+
+void sort_users(int users_n, char usernames[50][20], int scores[50]) {
+    for (int i = 0; i < users_n; i++) {
+        for (int j = i + 1; j < users_n; j++) {
+            if (scores[i] < scores[j]) {
+                int temp_score = scores[i];
+                scores[i] = scores[j];
+                scores[j] = temp_score;
+                char temp_username[20];
+                strcpy(temp_username, usernames[i]);
+                strcpy(usernames[i], usernames[j]);
+                strcpy(usernames[j], temp_username);
+            }
+        }
+    }
+
+
+}

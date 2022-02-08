@@ -160,6 +160,22 @@ void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number
 
 }
 
+void scoreboard_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr, char alert[]) {
+    SDL_Event Event;
+    while(SDL_PollEvent(&Event)) {
+        switch (Event.type) {
+            case SDL_QUIT:
+                *shall_exit_ptr = SDL_TRUE;
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (Event.button.x >= 600 && Event.button.x <= 800 && Event.button.y >= 150 && Event.button.y <= 230) {
+                    *window_number_ptr = 0;
+                    alert[0] = '\0';
+                }
+        }
+    }
+}
+
 // 0 -> valid -1 -> invalid
 int check_username(char username[]) {
     for (int i = 0; i < strlen(username); i++)

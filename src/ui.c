@@ -141,3 +141,21 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
     stringColor(Renderer, 650, 497, "CREATE A RAND MAP", 0xff000000);
 }
 
+
+void draw_scoreboard(SDL_Renderer* Renderer, int users_n, char usernames[50][20], int scores[50], char alert[]) {
+    stringColor(Renderer, 400, 75, alert, 0xff000000);
+    
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    for (int i = 0; i < (users_n < 15 ? users_n: 15); i++) { // first 15 users
+        stringColor(Renderer, 150, 150 + i * 20, usernames[i], 0xff000000);
+        char score[50];
+        sprintf(score, "%d", scores[i]);
+        stringColor(Renderer, 400, 150 + i * 20, score, 0xff000000);
+    }
+    if (mouse_x >= 600 && mouse_x <= 800 && mouse_y >= 150 && mouse_y <= 230)
+        boxColor(Renderer, 600, 150, 800, 230, 0xffff9100);
+    else boxColor(Renderer, 600, 150, 800, 230, 0xffffad42);
+
+    stringColor(Renderer, 630, 185, "Return to main menu.", 0xff000000);
+}

@@ -17,4 +17,6 @@ void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]);
 
 void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_number, char alert[], int global_players_n, int global_lands_n);
 
+void draw_scoreboard(SDL_Renderer* Renderer, int users_n, char usernames[50][20], int scores[50], char alert[]);
+
 #endif
