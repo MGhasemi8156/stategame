@@ -29,7 +29,7 @@ void event_listener(SDL_bool* shallExit_ptr, int lands_n, Land lands[20],
                                         pow(lands[i].barrack_y - Event.button.y, 2));
                         if (d <= lands[i].barrack_r + 5) {
                             if (*selected_land_ptr == NULL) {
-                                if (lands[i].side == 1 && !lands[i].is_attaking) { // only player could be the selected
+                                if (lands[i].side == 1) { // only player could be the selected
                                     *selected_land_ptr = &lands[i];
                                     (*selected_land_ptr)->selected = 1;
                                 }

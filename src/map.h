@@ -45,9 +45,6 @@ typedef struct Land {
 
     int selected;
     
-    int attack_queue;
-    int is_attaking;
-    
     // potions stuff4
     int unlimited_rebirth;
 } Land;

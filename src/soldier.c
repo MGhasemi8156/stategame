@@ -52,7 +52,7 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         }
         
         temp.power = 1;
-
+        
         temp.side = source->side;
         temp.source = source;
         temp.destination = destination;
@@ -65,12 +65,8 @@ void add_soldiers(int *soldiers_n, int *max_soldiers, Soldier **soldiers_ptr,
         (*soldiers_ptr)[*soldiers_n + i] = temp;
     }
     
-    // attack queue
-    source->attack_queue = source->soldiers;
-    // to avoid mutiple attack
-    source->is_attaking = 1;
-    
     *soldiers_n += source->soldiers;
+    source->soldiers = 0;
 }
 
 void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
@@ -79,8 +75,6 @@ void apply_soldiers(SDL_Renderer* Renderer, int soldiers_n, Soldier *soldiers) {
             soldiers[i].till_birth -= 1;
             if (soldiers[i].till_birth <= 0) {
                 soldiers[i].born = 1;
-                (soldiers[i].source)->soldiers -= 1;
-                (soldiers[i].source)->attack_queue -= 1;
             }
         }
         else {

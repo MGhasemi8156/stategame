@@ -77,8 +77,6 @@ void create_rand_map(int lands_n, Land lands[], int players) {
             lands[lands_i].rebirth_timer = REBIRTH_RATE;
            
             lands[lands_i].selected = 0;
-            lands[lands_i].is_attaking = 0;
-            lands[lands_i].attack_queue = 0;
 
             // potions stuff
             lands[lands_i].unlimited_rebirth = 0;
@@ -118,8 +116,6 @@ void create_rand_map(int lands_n, Land lands[], int players) {
         lands[lands_i].rebirth_timer = IMPARTIAL_REBIRTH_RATE;
 
         lands[lands_i].selected = 0;
-        lands[lands_i].is_attaking = 0;
-        lands[lands_i].attack_queue = 0;
 
         // potions stuff
         lands[lands_i].unlimited_rebirth = 0;
@@ -219,8 +215,6 @@ int load_rand_map(char file_path[100], int *lands_n, Land lands[]) {
                                                  &lands[i].side, &lands[i].soldiers, &lands[i].max_soldiers,
                                                  &lands[i].rebirth_rate, &lands[i].rebirth_timer);
         lands[i].selected = 0;
-        lands[i].is_attaking = 0;
-        lands[i].attack_queue = 0;
 
         // potions stuff
         lands[i].unlimited_rebirth = 0;
@@ -271,8 +265,6 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
                 }
             }
             
-            // off is attacking
-            if (lands[i].attack_queue <= 0) lands[i].is_attaking = 0;
         }
     }
 
