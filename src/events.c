@@ -154,6 +154,10 @@ void select_map_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number
                     *game_mode_ptr = 1;
                     *window_number_ptr = 3;
                 }
+                if (Event.button.x >= 415 && Event.button.x <= 665 && Event.button.y >= 600 &&
+                    Event.button.y <= 680) {
+                    *window_number_ptr = 0;
+                }
                 break;
         }
     }

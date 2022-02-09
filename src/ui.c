@@ -137,8 +137,12 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
     if (mouse_x >= 600 && mouse_x <= 850 && mouse_y >= 470 && mouse_y <= 530)
         boxColor(Renderer, 600, 470, 850, 530, 0xffff9100);
     else boxColor(Renderer, 600, 470, 850, 530, 0xffffad42);
-    
     stringColor(Renderer, 650, 497, "CREATE A RAND MAP", 0xff000000);
+
+    if (mouse_x >= 415 && mouse_x <= 665 && mouse_y >= 600 && mouse_y <= 680)
+        boxColor(Renderer, 415, 600, 665, 680, 0xffff9100);
+    else boxColor(Renderer, 415, 600, 665, 680, 0xffffad42);
+    stringColor(Renderer, 470, 635, "RETURN TO MAIN MENU", 0xff000000);
 }
 
 
@@ -157,5 +161,5 @@ void draw_scoreboard(SDL_Renderer* Renderer, int users_n, char usernames[50][20]
         boxColor(Renderer, 600, 150, 800, 230, 0xffff9100);
     else boxColor(Renderer, 600, 150, 800, 230, 0xffffad42);
 
-    stringColor(Renderer, 630, 185, "Return to main menu.", 0xff000000);
+    stringColor(Renderer, 630, 185, "RETURN TO MAIN MENU", 0xff000000);
 }
