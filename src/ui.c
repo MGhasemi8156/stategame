@@ -30,7 +30,12 @@ SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Render
 void draw_start_menu(SDL_Renderer* Renderer, TTF_Font* font, char username[], char alert[]) {
     // texts
     SDL_Color text_color = {0, 0, 0};
-    
+        
+    SDL_Surface* username_surface = TTF_RenderText_Solid(font, "Username:", text_color);
+    SDL_Texture* username_texture = SDL_CreateTextureFromSurface(Renderer, username_surface);
+    SDL_Rect username_rect = {.x = 45, .y = 230};
+    TTF_SizeText(font, "Username:", &username_rect.w, &username_rect.h);
+
     SDL_Surface* input_form_surface = TTF_RenderText_Solid(font, username, text_color);
     SDL_Texture* input_form_texture = SDL_CreateTextureFromSurface(Renderer, input_form_surface);
     SDL_Rect input_form_rect = {.x = 75, .y = 300};
@@ -57,6 +62,8 @@ void draw_start_menu(SDL_Renderer* Renderer, TTF_Font* font, char username[], ch
     SDL_Rect alert_rect = {.x = 45, .y = 365};
     TTF_SizeText(font, alert, &alert_rect.w, &alert_rect.h);
     
+    SDL_RenderCopy(Renderer, username_texture, NULL, &username_rect);
+
     // input form
     boxColor(Renderer, 40, 275, 340, 355, 0xcceb6e34);
     boxColor(Renderer, 43, 278, 337, 352, 0xffffffff);
@@ -115,6 +122,9 @@ void draw_start_menu(SDL_Renderer* Renderer, TTF_Font* font, char username[], ch
 
     SDL_DestroyTexture(alert_texture);
     SDL_FreeSurface(alert_surface);
+
+    SDL_DestroyTexture(username_texture);
+    SDL_FreeSurface(username_surface);
 }
 
 void draw_text_cursor(SDL_Renderer* Renderer, int w) {
@@ -155,7 +165,7 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
         SDL_DestroyTexture(map_texture);
     }
     
-    stringColor(Renderer, 150, 500, "LANDS:", 0xff000000);
+    stringColor(Renderer, 150, 500, "Lands:", 0xff000000);
     boxColor(Renderer, 210, 470, 270, 530, 0xffffffff);
     char lands_number[5];
     sprintf(lands_number, "%d", global_lands_n);
@@ -165,7 +175,7 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
     if (global_lands_n > 10)
         filledTrigonColor(Renderer, 280, 505, 300, 505, 290, 525, 0xff000000);
     
-    stringColor(Renderer, 340, 500, "PLAYERS:", 0xff000000);
+    stringColor(Renderer, 340, 500, "Players:", 0xff000000);
     boxColor(Renderer, 410, 470, 470, 530, 0xffffffff);
     char players_number[5];
     sprintf(players_number, "%d", global_players_n);
@@ -178,29 +188,32 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
     if (mouse_x >= 600 && mouse_x <= 850 && mouse_y >= 470 && mouse_y <= 530)
         boxColor(Renderer, 600, 470, 850, 530, 0xffff9100);
     else boxColor(Renderer, 600, 470, 850, 530, 0xffffad42);
-    stringColor(Renderer, 650, 497, "CREATE A RAND MAP", 0xff000000);
+    stringColor(Renderer, 650, 497, "Create a random map", 0xff000000);
 
     if (mouse_x >= 415 && mouse_x <= 665 && mouse_y >= 600 && mouse_y <= 680)
-        boxColor(Renderer, 415, 600, 665, 680, 0xffff9100);
-    else boxColor(Renderer, 415, 600, 665, 680, 0xffffad42);
-    stringColor(Renderer, 470, 635, "RETURN TO MAIN MENU", 0xff000000);
+        boxColor(Renderer, 415, 610, 665, 670, 0xffff9100);
+    else boxColor(Renderer, 415, 610, 665, 670, 0xffffad42);
+    stringColor(Renderer, 465, 635, "Return to main menu", 0xff000000);
 }
 
 
 void draw_scoreboard(SDL_Renderer* Renderer, int users_n, char usernames[50][20], int scores[50], char alert[]) {
     stringColor(Renderer, 400, 75, alert, 0xff000000);
     
+    boxColor(Renderer, 375, 120, 705, 600, 0xffff9100);
+    boxColor(Renderer, 380, 125, 700, 595, 0xffffffff);
+    
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
-    for (int i = 0; i < (users_n < 15 ? users_n: 15); i++) { // first 15 users
-        stringColor(Renderer, 150, 150 + i * 20, usernames[i], 0xff000000);
+    for (int i = 0; i < (users_n < 20 ? users_n: 20); i++) { // first 15 users
+        stringColor(Renderer, 420, 150 + i * 20, usernames[i], 0xff000000);
         char score[50];
         sprintf(score, "%d", scores[i]);
-        stringColor(Renderer, 400, 150 + i * 20, score, 0xff000000);
+        stringColor(Renderer, 630, 150 + i * 20, score, 0xff000000);
     }
-    if (mouse_x >= 600 && mouse_x <= 800 && mouse_y >= 150 && mouse_y <= 230)
-        boxColor(Renderer, 600, 150, 800, 230, 0xffff9100);
-    else boxColor(Renderer, 600, 150, 800, 230, 0xffffad42);
+    if (mouse_x >= 415&& mouse_x <= 665 && mouse_y >= 610 && mouse_y <= 670)
+        boxColor(Renderer, 415, 610, 665, 670, 0xffff9100);
+    else boxColor(Renderer, 415, 610, 665, 670, 0xffffad42);
 
-    stringColor(Renderer, 630, 185, "RETURN TO MAIN MENU", 0xff000000);
+    stringColor(Renderer, 465, 635, "Return to main menu", 0xff000000);
 }

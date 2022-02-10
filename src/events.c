@@ -89,16 +89,6 @@ void start_menu_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr,
                         sprintf(alert, "");
                     }
                 }
-                if (Event.button.x >= 135 && Event.button.x <= 405 && Event.button.y >= 495 && Event.button.y <= 575) {
-                    if (check_username(username) == -1)
-                        sprintf(alert, "Username can not include spaces");
-                    else if (check_username(username) == -2)
-                        sprintf(alert, "You must enter username");
-                    else {
-                        *window_number_ptr = 0; // TODO continue save game
-                        sprintf(alert, "");
-                    }
-                }
                 if (Event.button.x >= 175 && Event.button.x <= 440 && Event.button.y >= 590 && Event.button.y <= 670) {
                     if (check_username(username) == -1)
                         sprintf(alert, "Username can not include spaces");
@@ -172,7 +162,7 @@ void scoreboard_event_listener(SDL_bool* shall_exit_ptr, int* window_number_ptr,
                 *shall_exit_ptr = SDL_TRUE;
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                if (Event.button.x >= 600 && Event.button.x <= 800 && Event.button.y >= 150 && Event.button.y <= 230) {
+                if (Event.button.x >= 415 && Event.button.x <= 665 && Event.button.y >= 610 && Event.button.y <= 670) {
                     *window_number_ptr = 0;
                     alert[0] = '\0';
                 }
