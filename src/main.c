@@ -73,10 +73,12 @@ int main() {
                                                       SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_OPENGL);   
     SDL_Renderer *Renderer = SDL_CreateRenderer(game_window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     
+    TTF_Font* font = TTF_OpenFont("./assets/fonts/arial.ttf", 24);
+    if (font == NULL) printf("%s\n", TTF_GetError());
+    
     while (shall_exit == SDL_FALSE) {
         if (window_number == 0 || window_number == 1 || window_number == 2) {
-                        TTF_Font* font = TTF_OpenFont("./assets/fonts/liber.ttf", 12);
-            if (font == NULL) printf("=%s=\n", TTF_GetError());
+            
 
             // background image
             SDL_Texture* background_texture = create_background_texture("./assets/background.bmp", Renderer);
@@ -92,7 +94,7 @@ int main() {
                 // render   
 
                 if (window_number == 0) {
-                    draw_start_menu(Renderer, username, alert);
+                    draw_start_menu(Renderer, font, username, alert);
                     
                     start_menu_event_listener(&shall_exit, &window_number, username, alert);
                 }    
@@ -193,6 +195,7 @@ int main() {
 
         save_users(users_n, usernames, scores);
     }
+    TTF_CloseFont(font);
     SDL_DestroyRenderer(Renderer);
     SDL_DestroyWindow(game_window);
     

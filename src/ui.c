@@ -9,6 +9,8 @@
 
 #include "ui.h"
 
+void draw_text_cursor(SDL_Renderer* Renderer, int w);
+
 SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Renderer) {
     SDL_Surface* background_image = SDL_LoadBMP(image_path);
     if (background_image == NULL) {
@@ -25,17 +27,45 @@ SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Render
     return background_texture;
 }
 
-void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]) {
-
+void draw_start_menu(SDL_Renderer* Renderer, TTF_Font* font, char username[], char alert[]) {
+    // texts
     SDL_Color text_color = {0, 0, 0};
+    
+    SDL_Surface* input_form_surface = TTF_RenderText_Solid(font, username, text_color);
+    SDL_Texture* input_form_texture = SDL_CreateTextureFromSurface(Renderer, input_form_surface);
+    SDL_Rect input_form_rect = {.x = 75, .y = 300};
+    TTF_SizeText(font, username, &input_form_rect.w, &input_form_rect.h);
+    
+    SDL_Surface* select_map_surface = TTF_RenderText_Solid(font, "New game", text_color);
+    SDL_Texture* select_map_texture = SDL_CreateTextureFromSurface(Renderer, select_map_surface);
+    SDL_Rect select_map_rect = {.x = 150, .y = 425};
+    TTF_SizeText(font, "New game", &select_map_rect.w, &select_map_rect.h);
+    
+    SDL_Surface* continue_surface = TTF_RenderText_Solid(font, "Continue(Unavailable)", text_color);
+    SDL_Texture* continue_texture = SDL_CreateTextureFromSurface(Renderer, continue_surface);
+    SDL_Rect continue_rect = {.x = 135, .y = 520};
+    TTF_SizeText(font, "Continue(Unavailable)", &continue_rect.w, &continue_rect.h);
+    
+    SDL_Surface* scoreboard_surface = TTF_RenderText_Solid(font, "Scoreboard", text_color);
+    SDL_Texture* scoreboard_texture = SDL_CreateTextureFromSurface(Renderer, scoreboard_surface);
+    SDL_Rect scoreboard_rect = {.x = 210, .y = 615};
+    TTF_SizeText(font, "Scoreboard", &scoreboard_rect.w, &scoreboard_rect.h);
+    
+    SDL_Color alert_color = {255, 0, 0};
+    SDL_Surface* alert_surface = TTF_RenderText_Solid(font, alert, alert_color);
+    SDL_Texture* alert_texture = SDL_CreateTextureFromSurface(Renderer, alert_surface);
+    SDL_Rect alert_rect = {.x = 45, .y = 365};
+    TTF_SizeText(font, alert, &alert_rect.w, &alert_rect.h);
     
     // input form
     boxColor(Renderer, 40, 275, 340, 355, 0xcceb6e34);
     boxColor(Renderer, 43, 278, 337, 352, 0xffffffff);
 
-    stringColor(Renderer, 45, 300, username, 0xff000000);
-
-    stringColor(Renderer, 45, 370, alert, 0xff000000);
+    SDL_RenderCopy(Renderer, input_form_texture, NULL, &input_form_rect);
+    
+    draw_text_cursor(Renderer, input_form_rect.w);
+    
+    SDL_RenderCopy(Renderer, alert_texture, NULL, &alert_rect);
     // buttons
     Sint16 button1_vx[4] = {340, 40, 70, 370};
     Sint16 button1_vy[4] = {400, 400, 480, 480};
@@ -50,36 +80,47 @@ void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]) {
     if (mouse_x <= button1_vx[3] && mouse_x >= button1_vx[1] && mouse_y >= button1_vy[0] && mouse_y <= button1_vy[2]) {
         for (int i = 0; i < 4; i++) button1_vx[i] += 30;
         filledPolygonColor(Renderer, button1_vx, button1_vy, 4, 0xffff9100);
+        select_map_rect.x += 30;
     }
     else filledPolygonColor(Renderer, button1_vx, button1_vy, 4, 0xffffad42);
-    
+    SDL_RenderCopy(Renderer, select_map_texture, NULL, &select_map_rect);        
+
     if (mouse_x <= button2_vx[3] && mouse_x >= button2_vx[1] && mouse_y >= button2_vy[0] && mouse_y <= button2_vy[2]) {
         for (int i = 0; i < 4; i++) button2_vx[i] += 30;
+        continue_rect.x += 30;
         filledPolygonColor(Renderer, button2_vx, button2_vy, 4, 0xffff9100);
     }
     else filledPolygonColor(Renderer, button2_vx, button2_vy, 4, 0xffffad42);
+    SDL_RenderCopy(Renderer, continue_texture, NULL, &continue_rect);
 
     if (mouse_x <= button3_vx[3] && mouse_x >= button3_vx[1] && mouse_y >= button3_vy[0] && mouse_y <= button3_vy[2]) {
         for (int i = 0; i < 4; i++) button3_vx[i] += 30;
+        scoreboard_rect.x += 30;
         filledPolygonColor(Renderer, button3_vx, button3_vy, 4, 0xffff9100);
     }
     else filledPolygonColor(Renderer, button3_vx, button3_vy, 4, 0xffffad42);
-
-    SDL_Rect input_form_rect = {.x = 35, .y = 310, .w = 400, .h = 100};
-
-    // input form text
-    //SDL_Surface* input_form_text_surface = TTF_RenderText_Solid(font, username, text_color);
-    //SDL_Texture* input_form_text_texture = SDL_CreateTextureFromSurface(Renderer, input_form_text_surface);
-    //SDL_Rect input_form_text_rect = {.x = 35, .y = 310};
-    //SDL_QueryTexture(input_form_text_texture, NULL, NULL, &input_form_text_rect.w, &input_form_text_rect.h);
-    
-    // render stuff
-    //SDL_RenderCopy(Renderer, input_form_text_texture, NULL, &input_form_text_rect);
-    
+    SDL_RenderCopy(Renderer, scoreboard_texture, NULL, &scoreboard_rect);
     // free stuff
-    //SDL_FreeSurface(input_form_text_surface);
-    //SDL_DestroyTexture(input_form_text_texture);
+    SDL_DestroyTexture(input_form_texture);
+    SDL_FreeSurface(input_form_surface);
     
+    SDL_DestroyTexture(select_map_texture);
+    SDL_FreeSurface(select_map_surface);
+    
+    SDL_DestroyTexture(continue_texture);
+    SDL_FreeSurface(continue_surface);
+    
+    SDL_DestroyTexture(scoreboard_texture);
+    SDL_FreeSurface(scoreboard_surface);
+
+    SDL_DestroyTexture(alert_texture);
+    SDL_FreeSurface(alert_surface);
+}
+
+void draw_text_cursor(SDL_Renderer* Renderer, int w) {
+    static int blinker = 0;
+    if (blinker%60 > 30) boxColor(Renderer, 75 + w, 305, 80 + w, 325, 0xff000000);
+    blinker++;
 }
 
 

@@ -13,7 +13,7 @@
 
 SDL_Texture* create_background_texture(char image_path[50], SDL_Renderer* Renderer);
 
-void draw_start_menu(SDL_Renderer* Renderer, char username[], char alert[]);
+void draw_start_menu(SDL_Renderer* Renderer, TTF_Font* font, char username[], char alert[]);
 
 void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_number, char alert[], int global_players_n, int global_lands_n);
 
