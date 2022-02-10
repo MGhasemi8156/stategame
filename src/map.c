@@ -247,7 +247,13 @@ void apply_rand_map(SDL_Renderer* Renderer, int lands_n, Land lands[], Land* sel
         if (lands[i].has_barrack) { 
             // draw barrack
             Uint32 color = lands[i].selected && lands[i].side == 1 ? 0xffede2b9: get_side_normal_color(lands[i].side);
-            filledCircleColor(Renderer, lands[i].barrack_x, lands[i].barrack_y, lands[i].barrack_r, color);
+        
+            if (lands[i].rebirth_rate == 20) filledCircleColor(Renderer, lands[i].barrack_x, lands[i].barrack_y, lands[i].barrack_r + 5, 0xff00fbff);
+   
+            if (lands[i].unlimited_rebirth) filledCircleColor(Renderer, lands[i].barrack_x, lands[i].barrack_y, lands[i].barrack_r + 20, color);
+            else filledCircleColor(Renderer, lands[i].barrack_x, lands[i].barrack_y, lands[i].barrack_r, color);
+            
+            
             
             // add number
             char number[5];

@@ -134,7 +134,7 @@ void draw_text_cursor(SDL_Renderer* Renderer, int w) {
 }
 
 
-void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_number, char alert[], int global_players_n, int global_lands_n) {
+void draw_select_map_menu(SDL_Renderer* Renderer, TTF_Font* font, int maps_n, int current_map_number, char alert[], int global_players_n, int global_lands_n) {
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
     if (maps_n > 0) {
@@ -165,6 +165,18 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
         SDL_DestroyTexture(map_texture);
     }
     
+    SDL_Color text_color = {0, 0, 0};
+
+    SDL_Surface* create_button_surface = TTF_RenderText_Solid(font, "Create a random map", text_color);
+    SDL_Texture* create_button_texture = SDL_CreateTextureFromSurface(Renderer, create_button_surface);
+    SDL_Rect create_button_rect = {.x = 610, .y = 483};
+    TTF_SizeText(font, "Create a random map", &create_button_rect.w, &create_button_rect.h);
+
+    SDL_Surface* return_button_surface = TTF_RenderText_Solid(font, "Return to main menu", text_color);
+    SDL_Texture* return_button_texture = SDL_CreateTextureFromSurface(Renderer, return_button_surface);
+    SDL_Rect return_button_rect = {.x = 425, .y = 625};
+    TTF_SizeText(font, "Return to main menu", &return_button_rect.w, &return_button_rect.h);
+
     stringColor(Renderer, 150, 500, "Lands:", 0xff000000);
     boxColor(Renderer, 210, 470, 270, 530, 0xffffffff);
     char lands_number[5];
@@ -188,17 +200,42 @@ void draw_select_map_menu(SDL_Renderer* Renderer, int maps_n, int current_map_nu
     if (mouse_x >= 600 && mouse_x <= 850 && mouse_y >= 470 && mouse_y <= 530)
         boxColor(Renderer, 600, 470, 850, 530, 0xffff9100);
     else boxColor(Renderer, 600, 470, 850, 530, 0xffffad42);
-    stringColor(Renderer, 650, 497, "Create a random map", 0xff000000);
+    SDL_RenderCopy(Renderer, create_button_texture, NULL, &create_button_rect);
 
     if (mouse_x >= 415 && mouse_x <= 665 && mouse_y >= 600 && mouse_y <= 680)
         boxColor(Renderer, 415, 610, 665, 670, 0xffff9100);
     else boxColor(Renderer, 415, 610, 665, 670, 0xffffad42);
-    stringColor(Renderer, 465, 635, "Return to main menu", 0xff000000);
+    SDL_RenderCopy(Renderer, return_button_texture, NULL, &return_button_rect);
+
+    // free
+    SDL_DestroyTexture(create_button_texture);
+    SDL_FreeSurface(create_button_surface);
+
+    SDL_DestroyTexture(return_button_texture);
+    SDL_FreeSurface(return_button_surface);
 }
 
 
-void draw_scoreboard(SDL_Renderer* Renderer, int users_n, char usernames[50][20], int scores[50], char alert[]) {
-    stringColor(Renderer, 400, 75, alert, 0xff000000);
+void draw_scoreboard(SDL_Renderer* Renderer, TTF_Font* font, int users_n, char usernames[50][20], int scores[50], char alert[]) {
+    SDL_Color alert_color = {0, 0, 0};
+    
+    if (strstr(alert, "30") != NULL) alert_color.g = 255;
+    if (strstr(alert, "20") != NULL) alert_color.r = 255;
+
+    SDL_Surface* alert_surface = TTF_RenderText_Solid(font, alert, alert_color);
+    SDL_Texture* alert_texture = SDL_CreateTextureFromSurface(Renderer, alert_surface);
+    SDL_Rect alert_rect = {.x = 400, .y = 75};
+    TTF_SizeText(font, alert, &alert_rect.w, &alert_rect.h);
+    
+    SDL_Color text_color = {0, 0, 0};
+    SDL_Surface* return_surface = TTF_RenderText_Solid(font, "Return to main menu", text_color);
+    SDL_Texture* return_texture = SDL_CreateTextureFromSurface(Renderer, return_surface);
+    SDL_Rect return_rect = {.x = 430, .y = 627};
+    TTF_SizeText(font, "Return to main menu", &return_rect.w, &return_rect.h);
+
+
+
+    SDL_RenderCopy(Renderer, alert_texture, NULL, &alert_rect);
     
     boxColor(Renderer, 375, 120, 705, 600, 0xffff9100);
     boxColor(Renderer, 380, 125, 700, 595, 0xffffffff);
@@ -215,5 +252,12 @@ void draw_scoreboard(SDL_Renderer* Renderer, int users_n, char usernames[50][20]
         boxColor(Renderer, 415, 610, 665, 670, 0xffff9100);
     else boxColor(Renderer, 415, 610, 665, 670, 0xffffad42);
 
-    stringColor(Renderer, 465, 635, "Return to main menu", 0xff000000);
+    SDL_RenderCopy(Renderer, return_texture, NULL, &return_rect);
+    
+    // free 
+    SDL_DestroyTexture(alert_texture);
+    SDL_FreeSurface(alert_surface);
+
+    SDL_DestroyTexture(return_texture);
+    SDL_FreeSurface(return_surface);
 }

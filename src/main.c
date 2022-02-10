@@ -101,7 +101,7 @@ int main() {
                 if (window_number == 1) {
                     add_new_user(username, &users_n, usernames, scores);                
 
-                    draw_select_map_menu(Renderer, maps_n, current_map_number, alert, global_players_n, global_lands_n);
+                    draw_select_map_menu(Renderer, font, maps_n, current_map_number, alert, global_players_n, global_lands_n);
                     
                     select_map_menu_event_listener(&shall_exit, &window_number, alert, maps_n, &current_map_number, &game_mode, &global_lands_n, &global_players_n);
                     
@@ -114,7 +114,7 @@ int main() {
                     
                     sort_users(users_n, usernames, scores);
                     
-                    draw_scoreboard(Renderer, users_n, usernames, scores, alert);
+                    draw_scoreboard(Renderer, font, users_n, usernames, scores, alert);
                 
                     scoreboard_event_listener(&shall_exit, &window_number, alert);
 
@@ -156,12 +156,15 @@ int main() {
             int potions_n = 0;   
     
             add_new_user(username, &users_n, usernames, scores); 
-    
+            
             while (shall_exit == SDL_FALSE && window_number == 3) {
                 // renderer color and clear
                 SDL_SetRenderDrawColor(Renderer, 0xff, 0xff, 0xff, 0xff);
                 SDL_RenderClear(Renderer);
-        
+                
+                boxColor(Renderer, 0, 0, 2000, 1500, 0xfff2deb3);                
+
+
                 apply_rand_map(Renderer, lands_n, lands, selected_land);
         
 
@@ -192,7 +195,7 @@ int main() {
             // free allocated memory
             free(soldiers);
         }
-
+                
         save_users(users_n, usernames, scores);
     }
     TTF_CloseFont(font);
@@ -261,7 +264,7 @@ void check_win(int lands_n, Land lands[], int soldiers_n, Soldier *soldiers, cha
     for (int i = 0; i < users_n; i++) {
         if (strcmp(username, usernames[i]) == 0) {
             scores[i] += 30;
-            strcat(alert, "You win and you gain 30 points.");
+            strcat(alert, "You earned 30 points.");
             break;
         }
     }
@@ -282,7 +285,7 @@ void check_lose(int lands_n, Land lands[], int soldiers_n, Soldier *soldiers, ch
         if (strcmp(username, usernames[i]) == 0) {
             scores[i] -= 20;
             if (scores[i] < 0) scores[i] = 0;
-            strcat(alert, "You lose and you lose 20 points.");
+            strcat(alert, "You lost 20 points.");
             break;
         }
     }

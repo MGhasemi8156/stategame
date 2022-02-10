@@ -169,7 +169,7 @@ void unlimited_rebirth(int target_side, int lands_n, Land lands[]) {
 
 void end_unlimited_rebirth(int target_side, int lands_n, Land lands[]) {
     for (int i = 0; i < lands_n; i++) {
-        if (lands[i].side == target_side) lands[i].unlimited_rebirth = 0;
+        lands[i].unlimited_rebirth = 0;
     }
 }
 
@@ -183,9 +183,7 @@ void increase_rebirth_rate(int target_side, int lands_n, Land lands[]) {
 
 void end_increase_rebirth_rate(int target_side, int lands_n, Land lands[]) {
     for (int i = 0; i < lands_n; i++) {
-        if (lands[i].side == target_side) {
-            lands[i].rebirth_rate = REBIRTH_RATE;
-        }
+        lands[i].rebirth_rate = REBIRTH_RATE;
     }
 }
 
