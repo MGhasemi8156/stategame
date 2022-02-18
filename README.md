@@ -1,7 +1,6 @@
 # state
 A game based on [state.io](https://play.google.com/store/apps/details?id=io.state.fight&hl=fa&gl=US) create with C and SDL2.
-### Mohsen Ghasemi
-### 400105166
+![](./data/introduction.png)
 ## install requirements
 ### Ubuntu
 - Update apt-get `sudp apt-get update` .
