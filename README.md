@@ -1,5 +1,6 @@
 # state
 A game based on [state.io](https://play.google.com/store/apps/details?id=io.state.fight&hl=fa&gl=US) created with C and SDL2.
+
 ![](./data/introduction.png)
 ## install requirements
 ### Ubuntu
